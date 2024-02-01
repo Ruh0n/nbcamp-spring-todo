@@ -5,6 +5,7 @@ import com.sparta.assignment.nbcampspringtodo.security.dto.SignupResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.entity.User;
 import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
 import com.sparta.assignment.nbcampspringtodo.security.repository.UserRepository;
+import com.sparta.assignment.nbcampspringtodo.security.security.UserDetailsImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,20 @@ public class UserService {
     }
 
     return ResponseEntity.status(statusCode).body(new SignupResponseDto(username, message));
+  }
+
+  public ResponseEntity<String> deleteUser(UserDetailsImpl userDetails) {
+    String username = userDetails.getUsername();
+    String password = passwordEncoder.encode(userDetails.getPassword());
+
+    User user = userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+
+    user.getTodos().clear();
+    userRepository.delete(user);
+
+    return ResponseEntity.ok(username + " 회원이 성공적으로 삭제되었습니다.");
   }
 
 }

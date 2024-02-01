@@ -2,7 +2,6 @@ package com.sparta.assignment.nbcampspringtodo.security.controller;
 
 import com.sparta.assignment.nbcampspringtodo.security.dto.SignupRequestDto;
 import com.sparta.assignment.nbcampspringtodo.security.dto.SignupResponseDto;
-import com.sparta.assignment.nbcampspringtodo.security.dto.UserInfoDto;
 import com.sparta.assignment.nbcampspringtodo.security.security.UserDetailsImpl;
 import com.sparta.assignment.nbcampspringtodo.security.service.UserService;
 import jakarta.validation.Valid;
@@ -13,11 +12,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
@@ -49,12 +47,12 @@ public class UserController {
     return userService.signup(requestDto);
   }
 
-  @GetMapping("/user-info")
-  @ResponseBody
-  public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-    String username = userDetails.user().getUsername();
-
-    return new UserInfoDto(username);
+  @DeleteMapping("/user")
+  public ResponseEntity<String> deleteUser(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return userService.deleteUser(userDetails);
   }
+
 
 }
