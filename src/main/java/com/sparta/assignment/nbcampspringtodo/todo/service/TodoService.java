@@ -25,9 +25,10 @@ public class TodoService {
         .findByUsername(username)
         .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
 
-    Todo savedTodo = todoRepository.save(new Todo(requestDto, user));
+    Todo newTodo = new Todo(requestDto);
+    user.addTodo(newTodo);
 
-    return ResponseEntity.ok(new TodoResponseDto(savedTodo));
+    return ResponseEntity.ok(new TodoResponseDto(todoRepository.save(newTodo)));
   }
 
   @Transactional
@@ -47,6 +48,7 @@ public class TodoService {
     }
 
     todo.update(requestDto);
+
     return ResponseEntity.ok(new TodoResponseDto(todo));
   }
 

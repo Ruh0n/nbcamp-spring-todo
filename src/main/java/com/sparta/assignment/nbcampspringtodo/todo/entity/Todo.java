@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class Todo extends Timestamped {
@@ -37,17 +36,16 @@ public class Todo extends Timestamped {
   @Column(nullable = false)
   private boolean hidden;
 
+  @Setter
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Todo(TodoRequestDto requestDto, User user) {
+  public Todo(TodoRequestDto requestDto) {
     this.title = requestDto.getTitle();
     this.content = requestDto.getContent();
     this.completed = requestDto.isCompleted();
     this.hidden = requestDto.isHidden();
-
-    this.user = user;
   }
 
   public void update(TodoRequestDto requestDto) {
