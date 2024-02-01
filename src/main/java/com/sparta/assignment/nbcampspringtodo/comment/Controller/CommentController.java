@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,6 +61,14 @@ public class CommentController {
           .body(new CommentResponseDto(requestDto, "Comment 수정에 실패했습니다."));
     }
     return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
+  }
+
+  @DeleteMapping("/commentId/{commentId}")
+  public ResponseEntity<String> deleteComment(
+      @PathVariable Long commentId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return commentService.deleteComment(commentId, userDetails.getUsername());
   }
 
 }

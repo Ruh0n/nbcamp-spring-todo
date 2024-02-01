@@ -63,4 +63,20 @@ public class CommentService {
     return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment)));
   }
 
+  public ResponseEntity<String> deleteComment(Long commentId, String username) {
+    Comment comment = commentRepository
+        .findById(commentId)
+        .orElseThrow(() -> new NullPointerException("해당 Comment를 찾을 수 없습니다."));
+    User user = userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+    if (!Objects.equals(user.getId(), comment.getUser().getId())) {
+      throw new IllegalArgumentException("해당 유저의 Comment가 아닙니다.");
+    }
+
+    commentRepository.deleteById(commentId);
+    return ResponseEntity.ok("댓글이 삭제되었습니다.");
+
+  }
+
 }
