@@ -44,4 +44,22 @@ public class CommentController {
     return commentService.createComment(requestDto, todoId, userDetails.getUsername());
   }
 
+  @PutMapping("/commentId/{commentId}")
+  public ResponseEntity<CommentResponseDto> updateComment(
+      @PathVariable Long commentId,
+      @Valid @RequestBody CommentRequestDto requestDto,
+      BindingResult bindingResult,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    if (bindingResult.hasErrors()) {
+      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+      fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
+
+      return ResponseEntity
+          .badRequest()
+          .body(new CommentResponseDto(requestDto, "Comment 수정에 실패했습니다."));
+    }
+    return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
+  }
+
 }
