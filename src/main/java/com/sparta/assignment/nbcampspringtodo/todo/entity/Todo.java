@@ -32,10 +32,10 @@ public class Todo extends Timestamped {
   private String content;
 
   @Column(nullable = false)
-  private boolean isCompleted;
+  private boolean completed;
 
   @Column(nullable = false)
-  private boolean isHidden;
+  private boolean hidden;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
@@ -44,10 +44,17 @@ public class Todo extends Timestamped {
   public Todo(TodoRequestDto requestDto, User user) {
     this.title = requestDto.getTitle();
     this.content = requestDto.getContent();
-    this.isCompleted = requestDto.isCompleted();
-    this.isHidden = requestDto.isHidden();
+    this.completed = requestDto.isCompleted();
+    this.hidden = requestDto.isHidden();
 
     this.user = user;
+  }
+
+  public void update(TodoRequestDto requestDto) {
+    this.title = requestDto.getTitle();
+    this.content = requestDto.getContent();
+    this.completed = requestDto.isCompleted();
+    this.hidden = requestDto.isHidden();
   }
 
 }

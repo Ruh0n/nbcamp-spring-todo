@@ -14,8 +14,8 @@ public class TodoRequestDto {
   @NotBlank(message = "내용은 필수 입력입니다.")
   String content;
 
-  boolean isCompleted = false;
+  boolean completed = false;
 
-  boolean isHidden = false;
+  boolean hidden = false;
 
 }
