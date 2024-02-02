@@ -86,4 +86,10 @@ public class TodoService {
     return ResponseEntity.ok().build();
   }
 
+  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(String search) {
+    List<Todo> searchResult = todoRepository.findAllByTitleContainsAndHiddenIsFalse(search);
+
+    return ResponseEntity.ok(searchResult.stream().map(TodoResponseDto::new).toList());
+  }
+
 }

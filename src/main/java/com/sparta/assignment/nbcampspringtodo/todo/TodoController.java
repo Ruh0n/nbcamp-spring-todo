@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -79,6 +80,13 @@ public class TodoController {
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.deleteTodo(todoId, userDetails.getUsername());
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(
+      @RequestParam("q") String search
+  ) {
+    return todoService.searchTodoByTitle(search);
   }
 
 }
