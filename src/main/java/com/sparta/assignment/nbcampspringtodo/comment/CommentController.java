@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/comment")
 public class CommentController {
 
-  private final CommentService commentService;
-
-  @PutMapping("/todoId/{todoId}")
+  @PostMapping("/todoId/{todoId}")
   public ResponseEntity<CommentResponseDto> createComment(
       @PathVariable Long todoId,
       @Valid @RequestBody CommentRequestDto requestDto,
@@ -36,11 +35,19 @@ public class CommentController {
       List<FieldError> fieldErrors = bindingResult.getFieldErrors();
       fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
 
-      return ResponseEntity
-          .badRequest()
+      return ResponseEntity.badRequest()
           .body(new CommentResponseDto(requestDto, "Comment 등록에 실패했습니다."));
     }
     return commentService.createComment(requestDto, todoId, userDetails.getUsername());
+  }
+
+  private final CommentService commentService;
+
+  @GetMapping("/todoId/{todoId}")
+  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(
+      @PathVariable Long todoId
+  ) {
+    return commentService.getCommentByTodoId(todoId);
   }
 
   @PutMapping("/commentId/{commentId}")
@@ -54,8 +61,7 @@ public class CommentController {
       List<FieldError> fieldErrors = bindingResult.getFieldErrors();
       fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
 
-      return ResponseEntity
-          .badRequest()
+      return ResponseEntity.badRequest()
           .body(new CommentResponseDto(requestDto, "Comment 수정에 실패했습니다."));
     }
     return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
@@ -63,17 +69,9 @@ public class CommentController {
 
   @DeleteMapping("/commentId/{commentId}")
   public ResponseEntity<String> deleteComment(
-      @PathVariable Long commentId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails
+      @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return commentService.deleteComment(commentId, userDetails.getUsername());
-  }
-
-  @GetMapping("/todoId/{todoId}")
-  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(
-      @PathVariable Long todoId
-  ) {
-    return commentService.getCommentByTodoId(todoId);
   }
 
 }

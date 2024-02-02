@@ -17,7 +17,6 @@ public class TodoService {
   private UserRepository userRepository;
   private TodoRepository todoRepository;
 
-  // TODO 항상 반환 타입이 ok 인것 수정
 
   @Transactional
   public ResponseEntity<TodoResponseDto> createTodo(TodoRequestDto requestDto, String username) {
@@ -27,6 +26,34 @@ public class TodoService {
     Todo newTodo = new Todo(requestDto, user);
 
     return ResponseEntity.ok(new TodoResponseDto(todoRepository.save(newTodo)));
+  }
+
+  public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+
+    List<Todo> todos = todoRepository.findAllByUserId(user.getId());
+
+    return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
+  }
+
+  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(String search) {
+    List<Todo> searchResult = todoRepository.findAllByTitleContainsAndHiddenIsFalse(search);
+
+    return ResponseEntity.ok(searchResult.stream().map(TodoResponseDto::new).toList());
+  }
+
+  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(String username) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+
+    List<Todo> notHiddenTodos = todoRepository.findAllByHiddenIsFalse();
+    List<Todo> usersHiddenTodos = todoRepository.findAllByUserIdAndHiddenIsTrue(user.getId());
+    List<Todo> todos = new ArrayList<>();
+    todos.addAll(notHiddenTodos);
+    todos.addAll(usersHiddenTodos);
+
+    return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }
 
   @Transactional
@@ -48,28 +75,6 @@ public class TodoService {
     return ResponseEntity.ok(new TodoResponseDto(todo));
   }
 
-  public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(Long userId) {
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
-
-    List<Todo> todos = todoRepository.findAllByUserId(user.getId());
-
-    return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
-  }
-
-  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(String username) {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
-
-    List<Todo> notHiddenTodos = todoRepository.findAllByHiddenIsFalse();
-    List<Todo> usersHiddenTodos = todoRepository.findAllByUserIdAndHiddenIsTrue(user.getId());
-    List<Todo> todos = new ArrayList<>();
-    todos.addAll(notHiddenTodos);
-    todos.addAll(usersHiddenTodos);
-
-    return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
-  }
-
   @Transactional
   public ResponseEntity<String> deleteTodo(Long todoId, String username) {
     User user = userRepository.findByUsername(username)
@@ -84,12 +89,6 @@ public class TodoService {
 
     todoRepository.deleteById(todoId);
     return ResponseEntity.ok().build();
-  }
-
-  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(String search) {
-    List<Todo> searchResult = todoRepository.findAllByTitleContainsAndHiddenIsFalse(search);
-
-    return ResponseEntity.ok(searchResult.stream().map(TodoResponseDto::new).toList());
   }
 
 }

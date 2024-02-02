@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/todo")
 public class TodoController {
 
-  private final TodoService todoService;
-
-  @PutMapping()
+  @PostMapping()
   public ResponseEntity<TodoResponseDto> createTodo(
       @Valid @RequestBody TodoRequestDto requestDto,
       BindingResult bindingResult,
@@ -43,7 +41,30 @@ public class TodoController {
     return todoService.createTodo(requestDto, userDetails.getUsername());
   }
 
-  @PostMapping("/todoId/{todoId}")
+  private final TodoService todoService;
+
+  @GetMapping()
+  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
+  }
+
+  @GetMapping("/userId/{userId}")
+  public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(
+      @PathVariable Long userId
+  ) {
+    return todoService.getTodosByUserId(userId);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(
+      @RequestParam("q") String search
+  ) {
+    return todoService.searchTodoByTitle(search);
+  }
+
+  @PutMapping("/todoId/{todoId}")
   public ResponseEntity<TodoResponseDto> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto requestDto,
@@ -60,33 +81,12 @@ public class TodoController {
     return todoService.updateTodo(todoId, requestDto, userDetails.getUsername());
   }
 
-  @GetMapping("")
-  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(
-      @AuthenticationPrincipal UserDetailsImpl userDetails
-  ) {
-    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
-  }
-
-
-  @GetMapping("/userId/{userId}")
-  public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(
-      @PathVariable Long userId
-  ) {
-    return todoService.getTodosByUserId(userId);
-  }
 
   @DeleteMapping("/todoId/{todoId}")
   public ResponseEntity<String> deleteTodo(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.deleteTodo(todoId, userDetails.getUsername());
-  }
-
-  @GetMapping("/search")
-  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(
-      @RequestParam("q") String search
-  ) {
-    return todoService.searchTodoByTitle(search);
   }
 
 }

@@ -1,6 +1,5 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
-import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  private final JwtUtil jwtUtil;
 
 
   @Transactional
@@ -45,8 +43,7 @@ public class UserService {
     String username = userDetails.getUsername();
     String password = passwordEncoder.encode(userDetails.getPassword());
 
-    User user = userRepository
-        .findByUsername(username)
+    User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
 
     userRepository.delete(user);

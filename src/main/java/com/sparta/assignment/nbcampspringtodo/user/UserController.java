@@ -36,8 +36,7 @@ public class UserController {
         errors.append(e.getDefaultMessage()).append(" ");
       }
 
-      return ResponseEntity
-          .badRequest()
+      return ResponseEntity.badRequest()
           .body(new SignupResponseDto(requestDto.getUsername(), errors.toString()));
     }
 
