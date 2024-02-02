@@ -56,4 +56,10 @@ public class TodoService {
     return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }
 
+  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
+    List<Todo> todos = todoRepository.findAll();
+
+    return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
+  }
+
 }

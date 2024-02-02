@@ -58,6 +58,12 @@ public class TodoController {
     return todoService.updateTodo(todoId, requestDto, userDetails.getUsername());
   }
 
+  @GetMapping("")
+  public ResponseEntity<List<TodoResponseDto>> getAllTodos(){
+    return todoService.getAllTodos();
+  }
+
+
   @GetMapping("/userId/{userId}")
   public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(
       @PathVariable Long userId
