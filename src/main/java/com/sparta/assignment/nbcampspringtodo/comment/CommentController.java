@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,46 +22,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/comment")
 public class CommentController {
 
+  private final CommentService commentService;
+
   @PostMapping("/todoId/{todoId}")
   public ResponseEntity<CommentResponseDto> createComment(
       @PathVariable Long todoId,
       @Valid @RequestBody CommentRequestDto requestDto,
-      BindingResult bindingResult,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
-
-      return ResponseEntity.badRequest()
-          .body(new CommentResponseDto(requestDto, "Comment 등록에 실패했습니다."));
-    }
     return commentService.createComment(requestDto, todoId, userDetails.getUsername());
   }
 
-  private final CommentService commentService;
-
   @GetMapping("/todoId/{todoId}")
-  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(
+  public ResponseEntity<List<CommentResponseDto>> getCommentsByTodoId(
       @PathVariable Long todoId
   ) {
-    return commentService.getCommentByTodoId(todoId);
+    return commentService.getCommentsByTodoId(todoId);
   }
 
   @PutMapping("/commentId/{commentId}")
   public ResponseEntity<CommentResponseDto> updateComment(
       @PathVariable Long commentId,
       @Valid @RequestBody CommentRequestDto requestDto,
-      BindingResult bindingResult,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
-
-      return ResponseEntity.badRequest()
-          .body(new CommentResponseDto(requestDto, "Comment 수정에 실패했습니다."));
-    }
     return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
   }
 

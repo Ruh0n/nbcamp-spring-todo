@@ -25,23 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/todo")
 public class TodoController {
 
+  private final TodoService todoService;
+
   @PostMapping()
   public ResponseEntity<TodoResponseDto> createTodo(
       @Valid @RequestBody TodoRequestDto requestDto,
-      BindingResult bindingResult,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
-
-      return ResponseEntity.badRequest().body(new TodoResponseDto(requestDto, "TODO 등록에 실패했습니다."));
-    }
-
     return todoService.createTodo(requestDto, userDetails.getUsername());
   }
-
-  private final TodoService todoService;
 
   @GetMapping()
   public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(
@@ -68,16 +60,8 @@ public class TodoController {
   public ResponseEntity<TodoResponseDto> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto requestDto,
-      BindingResult bindingResult,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      fieldErrors.forEach(e -> log.error(e.getField() + ": " + e.getDefaultMessage()));
-
-      return ResponseEntity.badRequest().body(new TodoResponseDto(requestDto, "TODO 수정에 실패했습니다."));
-    }
-
     return todoService.updateTodo(todoId, requestDto, userDetails.getUsername());
   }
 

@@ -21,7 +21,7 @@ public class TodoService {
   @Transactional
   public ResponseEntity<TodoResponseDto> createTodo(TodoRequestDto requestDto, String username) {
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     Todo newTodo = new Todo(requestDto, user);
 
@@ -30,7 +30,7 @@ public class TodoService {
 
   public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(Long userId) {
     User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     List<Todo> todos = todoRepository.findAllByUserId(user.getId());
 
@@ -45,7 +45,7 @@ public class TodoService {
 
   public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(String username) {
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     List<Todo> notHiddenTodos = todoRepository.findAllByHiddenIsFalse();
     List<Todo> usersHiddenTodos = todoRepository.findAllByUserIdAndHiddenIsTrue(user.getId());
@@ -61,10 +61,10 @@ public class TodoService {
       Long todoId, TodoRequestDto requestDto, String username
   ) {
     Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("해당 Todo를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     if (!Objects.equals(todo.getUser().getId(), user.getId())) {
       throw new IllegalArgumentException("해당 유저의 Todo가 아닙니다.");
@@ -78,13 +78,13 @@ public class TodoService {
   @Transactional
   public ResponseEntity<String> deleteTodo(Long todoId, String username) {
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("해당 TODO를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     if (!Objects.equals(todo.getUser().getId(), user.getId())) {
-      return ResponseEntity.badRequest().body("해당 유저의 TODO가 아닙니다.");
+      throw new IllegalArgumentException("todo 삭제 실패");
     }
 
     todoRepository.deleteById(todoId);

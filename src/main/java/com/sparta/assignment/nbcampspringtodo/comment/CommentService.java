@@ -24,10 +24,10 @@ public class CommentService {
       CommentRequestDto requestDto, Long todoId, String username
   ) {
     Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("해당 TODO를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
     Comment comment = new Comment(requestDto, user, todo);
 
@@ -36,11 +36,11 @@ public class CommentService {
     return ResponseEntity.ok(new CommentResponseDto(savedComment));
   }
 
-  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(Long todoId) {
+  public ResponseEntity<List<CommentResponseDto>> getCommentsByTodoId(Long todoId) {
     Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("해당 TODO를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
-    List<Comment> comments = commentRepository.findAllByTodo_TodoId(todoId);
+    List<Comment> comments = commentRepository.findAllByTodo_TodoId(todo.getTodoId());
 
     return ResponseEntity.ok(comments.stream().map(CommentResponseDto::new).toList());
   }
@@ -50,9 +50,9 @@ public class CommentService {
       CommentRequestDto requestDto, Long commentId, String username
   ) {
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
     Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new NullPointerException("해당 Comment를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
 
     if (!Objects.equals(user.getId(), comment.getUser().getId())) {
       throw new IllegalArgumentException("해당 유저의 Comment가 아닙니다.");
@@ -63,17 +63,18 @@ public class CommentService {
     return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment)));
   }
 
+  @Transactional
   public ResponseEntity<String> deleteComment(Long commentId, String username) {
     Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new NullPointerException("해당 Comment를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
     if (!Objects.equals(user.getId(), comment.getUser().getId())) {
-      throw new IllegalArgumentException("해당 유저의 Comment가 아닙니다.");
+      throw new IllegalArgumentException("comment 삭제 실패");
     }
 
     commentRepository.deleteById(commentId);
-    return ResponseEntity.ok("댓글이 삭제되었습니다.");
+    return ResponseEntity.ok("comment 삭제 성공");
 
   }
 

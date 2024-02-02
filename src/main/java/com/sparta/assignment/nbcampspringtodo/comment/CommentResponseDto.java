@@ -9,11 +9,9 @@ public class CommentResponseDto {
 
   private Long commentId;
   private String content;
-  private String message;
 
-  public CommentResponseDto(CommentRequestDto requestDto, String message) {
+  public CommentResponseDto(CommentRequestDto requestDto) {
     this.content = requestDto.getContent();
-    this.message = message;
   }
 
   public CommentResponseDto(Comment savedComment) {
