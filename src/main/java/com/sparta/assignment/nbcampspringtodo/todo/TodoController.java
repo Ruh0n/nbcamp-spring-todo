@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +60,7 @@ public class TodoController {
   }
 
   @GetMapping("")
-  public ResponseEntity<List<TodoResponseDto>> getAllTodos(){
+  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
     return todoService.getAllTodos();
   }
 
@@ -69,6 +70,13 @@ public class TodoController {
       @PathVariable Long userId
   ) {
     return todoService.getTodosByUserId(userId);
+  }
+
+  @DeleteMapping("/todoId/{todoId}")
+  public ResponseEntity<String> deleteTodo(
+      @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.deleteTodo(todoId, userDetails.getUsername());
   }
 
 }

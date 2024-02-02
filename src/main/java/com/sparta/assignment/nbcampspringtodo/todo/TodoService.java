@@ -62,4 +62,20 @@ public class TodoService {
     return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }
 
+  @Transactional
+  public ResponseEntity<String> deleteTodo(Long todoId, String username) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+
+    Todo todo = todoRepository.findById(todoId)
+        .orElseThrow(() -> new NullPointerException("해당 TODO를 찾을 수 없습니다."));
+
+    if (!Objects.equals(todo.getUser().getId(), user.getId())) {
+      return ResponseEntity.badRequest().body("해당 유저의 TODO가 아닙니다.");
+    }
+
+    todoRepository.deleteById(todoId);
+    return ResponseEntity.ok().build();
+  }
+
 }
