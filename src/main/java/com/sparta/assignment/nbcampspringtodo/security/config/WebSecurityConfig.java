@@ -1,9 +1,9 @@
 package com.sparta.assignment.nbcampspringtodo.security.config;
 
 import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
-import com.sparta.assignment.nbcampspringtodo.security.security.JwtAuthenticationFilter;
-import com.sparta.assignment.nbcampspringtodo.security.security.JwtAuthorizationFilter;
-import com.sparta.assignment.nbcampspringtodo.security.security.UserDetailsServiceImpl;
+import com.sparta.assignment.nbcampspringtodo.security.JwtAuthenticationFilter;
+import com.sparta.assignment.nbcampspringtodo.security.JwtAuthorizationFilter;
+import com.sparta.assignment.nbcampspringtodo.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
