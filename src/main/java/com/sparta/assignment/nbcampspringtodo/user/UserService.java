@@ -49,7 +49,6 @@ public class UserService {
         .findByUsername(username)
         .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
 
-    user.getTodos().clear();
     userRepository.delete(user);
 
     return ResponseEntity.ok(username + " 회원이 성공적으로 삭제되었습니다.");

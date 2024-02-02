@@ -23,8 +23,7 @@ public class TodoService {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
 
-    Todo newTodo = new Todo(requestDto);
-    user.addTodo(newTodo);
+    Todo newTodo = new Todo(requestDto, user);
 
     return ResponseEntity.ok(new TodoResponseDto(todoRepository.save(newTodo)));
   }
@@ -52,7 +51,7 @@ public class TodoService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
 
-    List<Todo> todos = todoRepository.findAllByUserId(userId);
+    List<Todo> todos = todoRepository.findAllByUserId(user.getId());
 
     return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }

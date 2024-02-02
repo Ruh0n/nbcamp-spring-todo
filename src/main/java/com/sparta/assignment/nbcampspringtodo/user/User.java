@@ -33,28 +33,9 @@ public class User extends Timestamped {
   @Column(nullable = false)
   private String password;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
-  @Column(name = "todo_id")
-  private final List<Todo> todos = new ArrayList<>();
-
-  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
-  @Column(name = "comment_id")
-  private final List<Comment> comments = new ArrayList<>();
-
   public User(String username, String password) {
     this.username = username;
     this.password = password;
-  }
-
-  public void addTodo(Todo todo) {
-    todo.setUser(this);
-
-    this.todos.add(todo);
-  }
-  public void addComment(Comment comment) {
-    comment.setUser(this);
-
-    this.comments.add(comment);
   }
 
 }
