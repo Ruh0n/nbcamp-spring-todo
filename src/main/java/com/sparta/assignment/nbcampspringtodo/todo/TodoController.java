@@ -60,8 +60,10 @@ public class TodoController {
   }
 
   @GetMapping("")
-  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
-    return todoService.getAllTodos();
+  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
   }
 
 

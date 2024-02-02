@@ -2,6 +2,7 @@ package com.sparta.assignment.nbcampspringtodo.todo;
 
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -56,8 +57,15 @@ public class TodoService {
     return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }
 
-  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
-    List<Todo> todos = todoRepository.findAll();
+  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(String username) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("해당 유저를 찾을 수 없습니다."));
+
+    List<Todo> notHiddenTodos = todoRepository.findAllByHiddenIsFalse();
+    List<Todo> usersHiddenTodos = todoRepository.findAllByUserIdAndHiddenIsTrue(user.getId());
+    List<Todo> todos = new ArrayList<>();
+    todos.addAll(notHiddenTodos);
+    todos.addAll(usersHiddenTodos);
 
     return ResponseEntity.ok(todos.stream().map(TodoResponseDto::new).toList());
   }

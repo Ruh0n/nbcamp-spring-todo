@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +67,13 @@ public class CommentController {
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return commentService.deleteComment(commentId, userDetails.getUsername());
+  }
+
+  @GetMapping("/todoId/{todoId}")
+  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(
+      @PathVariable Long todoId
+  ) {
+    return commentService.getCommentByTodoId(todoId);
   }
 
 }

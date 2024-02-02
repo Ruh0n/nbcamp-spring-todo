@@ -4,6 +4,7 @@ import com.sparta.assignment.nbcampspringtodo.todo.Todo;
 import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +66,15 @@ public class CommentService {
     commentRepository.deleteById(commentId);
     return ResponseEntity.ok("댓글이 삭제되었습니다.");
 
+  }
+
+  public ResponseEntity<List<CommentResponseDto>> getCommentByTodoId(Long todoId) {
+    Todo todo = todoRepository.findById(todoId)
+        .orElseThrow(() -> new NullPointerException("해당 TODO를 찾을 수 없습니다."));
+
+    List<Comment> comments = commentRepository.findAllByTodo_TodoId(todoId);
+
+    return ResponseEntity.ok(comments.stream().map(CommentResponseDto::new).toList());
   }
 
 }

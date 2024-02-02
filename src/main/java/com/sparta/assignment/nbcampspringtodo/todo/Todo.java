@@ -37,7 +37,7 @@ public class Todo extends Timestamped {
 
   @Setter
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   public Todo(TodoRequestDto requestDto, User user) {

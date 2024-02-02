@@ -28,17 +28,18 @@ public class Comment extends Timestamped {
 
   @ManyToOne
   @Setter
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne
   @Setter
-  @JoinColumn(name = "todo_id")
+  @JoinColumn(name = "todo_id", nullable = false)
   private Todo todo;
 
   public Comment(CommentRequestDto requestDto, User user, Todo todo) {
     this.content = requestDto.getContent();
     this.user = user;
+    this.todo = todo;
   }
 
   public void update(CommentRequestDto requestDto) {
