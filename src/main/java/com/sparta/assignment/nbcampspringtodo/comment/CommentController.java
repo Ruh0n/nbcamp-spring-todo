@@ -1,5 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.comment;
 
+import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,7 +26,7 @@ public class CommentController {
   private final CommentService commentService;
 
   @PostMapping("/todoId/{todoId}")
-  public ResponseEntity<CommentResponseDto> createComment(
+  public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
       @PathVariable Long todoId,
       @Valid @RequestBody CommentRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -34,14 +35,14 @@ public class CommentController {
   }
 
   @GetMapping("/todoId/{todoId}")
-  public ResponseEntity<List<CommentResponseDto>> getCommentsByTodoId(
+  public ResponseEntity<ResponseDto<List<CommentResponseDto>>> getCommentsByTodoId(
       @PathVariable Long todoId
   ) {
     return commentService.getCommentsByTodoId(todoId);
   }
 
   @PutMapping("/commentId/{commentId}")
-  public ResponseEntity<CommentResponseDto> updateComment(
+  public ResponseEntity<ResponseDto<CommentResponseDto>> updateComment(
       @PathVariable Long commentId,
       @Valid @RequestBody CommentRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -50,7 +51,7 @@ public class CommentController {
   }
 
   @DeleteMapping("/commentId/{commentId}")
-  public ResponseEntity<String> deleteComment(
+  public ResponseEntity<ResponseDto<String>> deleteComment(
       @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return commentService.deleteComment(commentId, userDetails.getUsername());

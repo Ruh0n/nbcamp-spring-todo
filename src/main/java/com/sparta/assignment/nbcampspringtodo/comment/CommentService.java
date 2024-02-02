@@ -1,5 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.comment;
 
+import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.todo.Todo;
 import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
 import com.sparta.assignment.nbcampspringtodo.user.User;
@@ -7,6 +8,7 @@ import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,33 +22,38 @@ public class CommentService {
   private final TodoRepository todoRepository;
 
   @Transactional
-  public ResponseEntity<CommentResponseDto> createComment(
+  public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
       CommentRequestDto requestDto, Long todoId, String username
   ) {
     Todo todo = todoRepository.findById(todoId)
         .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
-
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
-    Comment comment = new Comment(requestDto, user, todo);
+    Comment comment = commentRepository.save(new Comment(requestDto, user, todo));
 
-    Comment savedComment = commentRepository.save(comment);
-
-    return ResponseEntity.ok(new CommentResponseDto(savedComment));
+    return ResponseEntity.ok(ResponseDto.<CommentResponseDto>builder()
+                                 .httpStatus(HttpStatus.OK)
+                                 .message("comment 등록 성공")
+                                 .data(new CommentResponseDto(comment))
+                                 .build());
   }
 
-  public ResponseEntity<List<CommentResponseDto>> getCommentsByTodoId(Long todoId) {
+  public ResponseEntity<ResponseDto<List<CommentResponseDto>>> getCommentsByTodoId(Long todoId) {
     Todo todo = todoRepository.findById(todoId)
         .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     List<Comment> comments = commentRepository.findAllByTodo_TodoId(todo.getTodoId());
 
-    return ResponseEntity.ok(comments.stream().map(CommentResponseDto::new).toList());
+    return ResponseEntity.ok(ResponseDto.<List<CommentResponseDto>>builder()
+                                 .httpStatus(HttpStatus.OK)
+                                 .message("comment 조회 성공")
+                                 .data(comments.stream().map(CommentResponseDto::new).toList())
+                                 .build());
   }
 
   @Transactional
-  public ResponseEntity<CommentResponseDto> updateComment(
+  public ResponseEntity<ResponseDto<CommentResponseDto>> updateComment(
       CommentRequestDto requestDto, Long commentId, String username
   ) {
     User user = userRepository.findByUsername(username)
@@ -60,11 +67,15 @@ public class CommentService {
 
     comment.update(requestDto);
 
-    return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment)));
+    return ResponseEntity.ok(ResponseDto.<CommentResponseDto>builder()
+                                 .httpStatus(HttpStatus.OK)
+                                 .message("comment 수정 성공")
+                                 .data(new CommentResponseDto(comment))
+                                 .build());
   }
 
   @Transactional
-  public ResponseEntity<String> deleteComment(Long commentId, String username) {
+  public ResponseEntity<ResponseDto<String>> deleteComment(Long commentId, String username) {
     Comment comment = commentRepository.findById(commentId)
         .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
     User user = userRepository.findByUsername(username)
@@ -74,8 +85,11 @@ public class CommentService {
     }
 
     commentRepository.deleteById(commentId);
-    return ResponseEntity.ok("comment 삭제 성공");
 
+    return ResponseEntity.ok(ResponseDto.<String>builder()
+                                 .httpStatus(HttpStatus.OK)
+                                 .message("comment 삭제 성공")
+                                 .build());
   }
 
 }
