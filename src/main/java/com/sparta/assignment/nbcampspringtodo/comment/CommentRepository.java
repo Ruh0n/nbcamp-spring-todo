@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-  List<Comment> findAllByTodo_TodoId(Long todo_id);
+  List<Comment> findAllByTodo_TodoId(Long todoId);
 
 }

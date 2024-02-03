@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-  List<Todo> findAllByUserId(Long user_id);
+  List<Todo> findAllByUserId(Long userId);
 
   List<Todo> findAllByHiddenIsFalse();
 
-  List<Todo> findAllByUserIdAndHiddenIsTrue(Long user_id);
+  List<Todo> findAllByUserIdAndHiddenIsTrue(Long userId);
 
   @Query("select t from Todo t where t.title like concat('%', ?1, '%') and t.hidden = false")
   List<Todo> findAllByTitleContainsAndHiddenIsFalse(String search);

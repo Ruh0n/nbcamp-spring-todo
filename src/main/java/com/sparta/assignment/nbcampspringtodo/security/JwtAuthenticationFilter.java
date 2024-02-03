@@ -1,8 +1,8 @@
 package com.sparta.assignment.nbcampspringtodo.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.assignment.nbcampspringtodo.user.LoginRequestDto;
 import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
+import com.sparta.assignment.nbcampspringtodo.user.LoginRequestDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword(), null));
     } catch (IOException e) {
       log.error(e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new IllegalArgumentException(e.getMessage());
     }
   }
 
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       FilterChain chain,
       Authentication authResult
   ) {
-    String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+    this.username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
 
     String token = jwtUtil.createToken(username);
 

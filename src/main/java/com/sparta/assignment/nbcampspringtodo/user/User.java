@@ -1,18 +1,12 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
-import com.sparta.assignment.nbcampspringtodo.comment.Comment;
 import com.sparta.assignment.nbcampspringtodo.common.Timestamped;
-import com.sparta.assignment.nbcampspringtodo.todo.Todo;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -8,7 +8,7 @@ import lombok.Getter;
 public class CommentResponseDto {
 
   private Long commentId;
-  private String content;
+  private final String content;
 
   public CommentResponseDto(CommentRequestDto requestDto) {
     this.content = requestDto.getContent();

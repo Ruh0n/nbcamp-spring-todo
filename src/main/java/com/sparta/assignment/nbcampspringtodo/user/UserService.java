@@ -34,7 +34,6 @@ public class UserService {
 
   public ResponseEntity<String> deleteUser(UserDetailsImpl userDetails) {
     String username = userDetails.getUsername();
-    String password = passwordEncoder.encode(userDetails.getPassword());
 
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));

@@ -23,7 +23,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       HttpStatusCode status,
       WebRequest request
   ) {
-    StringBuffer errors = new StringBuffer();
+    StringBuilder errors = new StringBuilder();
     ex.getAllErrors().forEach(error -> errors.append(error.getDefaultMessage()).append(" "));
     errors.setLength(errors.length() - 1);
 

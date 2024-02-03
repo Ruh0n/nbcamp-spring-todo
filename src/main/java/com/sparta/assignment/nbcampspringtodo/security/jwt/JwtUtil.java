@@ -5,9 +5,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
@@ -28,12 +28,11 @@ public class JwtUtil {
   // Token 식별자
   public static final String BEARER_PREFIX = "Bearer ";
   // 토큰 만료시간
-  private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
-
+  private final static long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+  private final static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
   @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
   private String secretKey;
   private Key key;
-  private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
   @PostConstruct
   public void init() {
@@ -66,7 +65,7 @@ public class JwtUtil {
     try {
       Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
       return true;
-    } catch (SecurityException | MalformedJwtException | SignatureException e) {
+    } catch (MalformedJwtException | SecurityException e) {
       log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
     } catch (ExpiredJwtException e) {
       log.error("Expired JWT token, 만료된 JWT token 입니다.");
