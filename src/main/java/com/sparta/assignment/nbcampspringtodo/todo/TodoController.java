@@ -1,7 +1,9 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
+import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,36 +28,36 @@ public class TodoController {
   private final TodoService todoService;
 
   @PostMapping()
-  public ResponseEntity<TodoResponseDto> createTodo(
+  public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.createTodo(requestDto, userDetails.getUsername());
   }
 
-  @GetMapping()
-  public ResponseEntity<List<TodoResponseDto>> getAllNotHiddenTodos(
-      @AuthenticationPrincipal UserDetailsImpl userDetails
-  ) {
-    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
-  }
-
   @GetMapping("/userId/{userId}")
-  public ResponseEntity<List<TodoResponseDto>> getTodosByUserId(
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodosByUserId(
       @PathVariable Long userId
   ) {
     return todoService.getTodosByUserId(userId);
   }
 
+  @GetMapping()
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllNotHiddenTodos(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
+  }
+
   @GetMapping("/search")
-  public ResponseEntity<List<TodoResponseDto>> searchTodoByTitle(
-      @RequestParam("q") String search
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> searchTodoByTitle(
+      @Valid @NotBlank @RequestParam("q") String search
   ) {
     return todoService.searchTodoByTitle(search);
   }
 
   @PutMapping("/todoId/{todoId}")
-  public ResponseEntity<TodoResponseDto> updateTodo(
+  public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -65,7 +67,7 @@ public class TodoController {
 
 
   @DeleteMapping("/todoId/{todoId}")
-  public ResponseEntity<String> deleteTodo(
+  public ResponseEntity<ResponseDto<String>> deleteTodo(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.deleteTodo(todoId, userDetails.getUsername());

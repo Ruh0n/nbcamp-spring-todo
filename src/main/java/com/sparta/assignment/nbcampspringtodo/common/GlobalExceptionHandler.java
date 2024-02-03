@@ -1,6 +1,5 @@
-package com.sparta.assignment.nbcampspringtodo.error;
+package com.sparta.assignment.nbcampspringtodo.common;
 
-import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

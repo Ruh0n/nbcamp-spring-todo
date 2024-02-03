@@ -1,8 +1,10 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
+import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,22 +19,25 @@ public class UserService {
 
 
   @Transactional
-  public ResponseEntity<SignupResponseDto> signup(SignupRequestDto requestDto) {
+  public ResponseEntity<ResponseDto<SignupResponseDto>> signup(SignupRequestDto requestDto) {
     String username = requestDto.getUsername();
     String password = passwordEncoder.encode(requestDto.getPassword());
 
-    // 이름 중복 확인
     Optional<User> existingUser = userRepository.findByUsername(username);
     if (existingUser.isPresent()) {
       throw new IllegalArgumentException("username 중복");
     }
-    User NewUser = new User(username, password);
-    userRepository.save(NewUser);
 
-    return ResponseEntity.ok(new SignupResponseDto(username));
+    ResponseDto<SignupResponseDto> responseDto = ResponseDto.<SignupResponseDto>builder()
+        .httpStatus(HttpStatus.OK)
+        .message("user 등록 성공")
+        .data(new SignupResponseDto(userRepository.save(new User(username, password))))
+        .build();
+
+    return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<String> deleteUser(UserDetailsImpl userDetails) {
+  public ResponseEntity<ResponseDto<String>> deleteUser(UserDetailsImpl userDetails) {
     String username = userDetails.getUsername();
 
     User user = userRepository.findByUsername(username)
@@ -40,7 +45,12 @@ public class UserService {
 
     userRepository.delete(user);
 
-    return ResponseEntity.ok(username + " user 삭제 성공");
+    ResponseDto<String> responseDto = ResponseDto.<String>builder()
+        .httpStatus(HttpStatus.OK)
+        .message("user 삭제 성공")
+        .build();
+
+    return ResponseEntity.ok(responseDto);
   }
 
 }

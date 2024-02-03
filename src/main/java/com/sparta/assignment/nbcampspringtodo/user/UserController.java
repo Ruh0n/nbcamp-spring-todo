@@ -1,5 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
+import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/signup")
-  public ResponseEntity<SignupResponseDto> signUp(
+  public ResponseEntity<ResponseDto<SignupResponseDto>> signUp(
       @Valid @RequestBody SignupRequestDto requestDto
   ) {
     return userService.signup(requestDto);
   }
 
   @DeleteMapping()
-  public ResponseEntity<String> deleteUser(
+  public ResponseEntity<ResponseDto<String>> deleteUser(
       @Valid @RequestBody DeleteUserRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
