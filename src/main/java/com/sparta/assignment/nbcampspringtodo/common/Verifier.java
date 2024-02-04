@@ -18,12 +18,6 @@ public class Verifier {
   private final TodoRepository todoRepository;
   private final CommentRepository commentRepository;
 
-  private static void assertEqualUsers(User user1, User user2) {
-    if (!Objects.equals(user1, user2)) {
-      throw new IllegalArgumentException("잘못된 접근");
-    }
-  }
-
   public User verifyUser(String username) {
 
     return userRepository.findByUsername(username)
@@ -76,6 +70,12 @@ public class Verifier {
     assertEqualUsers(user, comment.getUser());
 
     return comment;
+  }
+
+  private void assertEqualUsers(User user1, User user2) {
+    if (!Objects.equals(user1, user2)) {
+      throw new IllegalArgumentException("잘못된 접근");
+    }
   }
 
 }
