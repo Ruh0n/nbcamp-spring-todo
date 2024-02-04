@@ -7,9 +7,8 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDto {
 
-  private Long commentId;
-
   private final String content;
+  private Long commentId;
 
 
   public CommentResponseDto(CommentRequestDto requestDto) {

@@ -18,6 +18,7 @@ public class ResponseDto<T> {
 
   private T data;
 
+
   public String getHttpStatus() {
     return httpStatus.toString();
   }

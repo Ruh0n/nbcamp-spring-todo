@@ -17,10 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class TodoService {
 
+  private final CommentRepository commentRepository;
   private UserRepository userRepository;
   private TodoRepository todoRepository;
-  private final CommentRepository commentRepository;
-
 
   @Transactional
   public ResponseEntity<ResponseDto<TodoDetailResponseDto>> createTodo(
