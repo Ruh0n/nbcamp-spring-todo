@@ -28,36 +28,43 @@ public class TodoController {
   private final TodoService todoService;
 
   @PostMapping()
-  public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
+  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> createTodo(
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.createTodo(requestDto, userDetails.getUsername());
   }
 
+  @GetMapping("/todoId/{todoId}")
+  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> getTodoDetail(
+      @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getTodoDetail(todoId, userDetails.getUsername());
+  }
+
   @GetMapping("/userId/{userId}")
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodosByUserId(
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
       @PathVariable Long userId
   ) {
     return todoService.getTodosByUserId(userId);
   }
 
   @GetMapping()
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllNotHiddenTodos(
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.getAllNotHiddenTodos(userDetails.getUsername());
   }
 
   @GetMapping("/search")
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> searchTodoByTitle(
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(
       @Valid @NotBlank @RequestParam("q") String search
   ) {
     return todoService.searchTodoByTitle(search);
   }
 
   @PutMapping("/todoId/{todoId}")
-  public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
+  public ResponseEntity<ResponseDto<TodoListResponseDto>> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails

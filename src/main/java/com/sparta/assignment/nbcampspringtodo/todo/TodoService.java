@@ -1,5 +1,7 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
+import com.sparta.assignment.nbcampspringtodo.comment.Comment;
+import com.sparta.assignment.nbcampspringtodo.comment.CommentRepository;
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
@@ -17,62 +19,85 @@ public class TodoService {
 
   private UserRepository userRepository;
   private TodoRepository todoRepository;
+  private final CommentRepository commentRepository;
 
 
   @Transactional
-  public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
+  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> createTodo(
       TodoRequestDto requestDto, String username
   ) {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
-    ResponseDto<TodoResponseDto> responseDto = ResponseDto.<TodoResponseDto>builder()
+    ResponseDto<TodoDetailResponseDto> responseDto = ResponseDto.<TodoDetailResponseDto>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 등록 성공")
-        .data(new TodoResponseDto(todoRepository.save(new Todo(requestDto, user))))
+        .data(new TodoDetailResponseDto(todoRepository.save(new Todo(requestDto, user))))
         .build();
 
     return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodosByUserId(Long userId) {
+  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> getTodoDetail(
+      Long todoId, String username
+  ) {
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
+    Todo todo = todoRepository.findById(todoId)
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
+
+    if (todo.isHidden() && (!Objects.equals(todo.getUser(), user))) {
+      throw new IllegalArgumentException("잘못된 접근");
+    }
+
+    List<Comment> comments = commentRepository.findAllByTodo_TodoId(todoId);
+
+    ResponseDto<TodoDetailResponseDto> responseDto = ResponseDto.<TodoDetailResponseDto>builder()
+        .httpStatus(HttpStatus.OK)
+        .message("todo 조회 성공")
+        .data(new TodoDetailResponseDto(todo, comments))
+        .build();
+
+    return ResponseEntity.ok(responseDto);
+  }
+
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(Long userId) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
-    ResponseDto<List<TodoResponseDto>> responseDto = ResponseDto.<List<TodoResponseDto>>builder()
+    ResponseDto<List<TodoListResponseDto>> responseDto = ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 조회 성공")
         .data(todoRepository.findAllByUserId(user.getId())
             .stream()
-            .map(TodoResponseDto::new)
+            .map(TodoListResponseDto::new)
             .toList())
         .build();
 
     return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllNotHiddenTodos(String username) {
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(String username) {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-
     List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserId(user.getId());
 
-    ResponseDto<List<TodoResponseDto>> responseDto = ResponseDto.<List<TodoResponseDto>>builder()
+    ResponseDto<List<TodoListResponseDto>> responseDto = ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 조회 성공")
-        .data(todos.stream().map(TodoResponseDto::new).toList())
+        .data(todos.stream().map(TodoListResponseDto::new).toList())
         .build();
 
     return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> searchTodoByTitle(String search) {
-    ResponseDto<List<TodoResponseDto>> responseDto = ResponseDto.<List<TodoResponseDto>>builder()
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(String search) {
+    ResponseDto<List<TodoListResponseDto>> responseDto = ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 조회 성공")
         .data(todoRepository.findAllByTitleContainsAndHiddenIsFalse(search)
             .stream()
-            .map(TodoResponseDto::new)
+            .map(TodoListResponseDto::new)
             .toList())
         .build();
 
@@ -80,24 +105,24 @@ public class TodoService {
   }
 
   @Transactional
-  public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
+  public ResponseEntity<ResponseDto<TodoListResponseDto>> updateTodo(
       Long todoId, TodoRequestDto requestDto, String username
   ) {
-    Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
+    Todo todo = todoRepository.findById(todoId)
+        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     if (!Objects.equals(todo.getUser().getId(), user.getId())) {
-      throw new IllegalArgumentException("해당 user의 todo가 아닙니다.");
+      throw new IllegalArgumentException("잘못된 접근");
     }
 
     todo.update(requestDto);
 
-    ResponseDto<TodoResponseDto> responseDto = ResponseDto.<TodoResponseDto>builder()
+    ResponseDto<TodoListResponseDto> responseDto = ResponseDto.<TodoListResponseDto>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 수정 성공")
-        .data(new TodoResponseDto(todo))
+        .data(new TodoListResponseDto(todo))
         .build();
 
     return ResponseEntity.ok(responseDto);
@@ -107,12 +132,11 @@ public class TodoService {
   public ResponseEntity<ResponseDto<String>> deleteTodo(Long todoId, String username) {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-
     Todo todo = todoRepository.findById(todoId)
         .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
 
     if (!Objects.equals(todo.getUser().getId(), user.getId())) {
-      throw new IllegalArgumentException("todo 삭제 실패");
+      throw new IllegalArgumentException("잘못된 접근");
     }
 
     todoRepository.deleteById(todoId);

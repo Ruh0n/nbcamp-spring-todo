@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class TodoRequestDto {
 
-  @NotBlank(message = "제목은 필수 입력입니다.")
+  @NotBlank(message = "제목 입력은 필수입니다.")
   String title;
 
-  @NotBlank(message = "내용은 필수 입력입니다.")
+  @NotBlank(message = "내용 입력은 필수입니다.")
   String content;
 
   boolean completed = false;
