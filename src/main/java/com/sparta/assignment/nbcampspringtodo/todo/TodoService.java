@@ -51,9 +51,9 @@ public class TodoService {
 
     List<Todo> todos;
     if (Objects.equals(targetUser, currentUser)) {
-      todos = todoRepository.findAllByUserId(currentUser.getId());
+      todos = todoRepository.findAllByUserIdOrderByLastModifiedDateDesc(currentUser.getId());
     } else {
-      todos = todoRepository.findAllByUserIdAndHiddenIsFalse(currentUser.getId());
+      todos = todoRepository.findAllByUserIdAndHiddenIsFalseOrderByLastModifiedDateDesc(currentUser.getId());
     }
 
     return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
@@ -65,7 +65,7 @@ public class TodoService {
 
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(String username) {
     User user = verifier.verifyUser(username);
-    List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserId(user.getId());
+    List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserIdOrderByLastModifiedDateDesc(user.getId());
 
     ResponseDto<List<TodoListResponseDto>> responseDto = ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)
@@ -77,7 +77,7 @@ public class TodoService {
   }
 
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(String search) {
-    List<Todo> todos = todoRepository.findAllByTitleContainsAndHiddenIsFalse(search);
+    List<Todo> todos = todoRepository.findAllByTitleContainsAndHiddenIsFalseOrderByLastModifiedDateDesc(search);
 
     return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-  List<Todo> findAllByUserId(Long userId);
+  List<Todo> findAllByUserIdOrderByLastModifiedDateDesc(Long userId);
 
-  List<Todo> findAllByUserIdAndHiddenIsFalse(Long userId);
+  List<Todo> findAllByUserIdAndHiddenIsFalseOrderByLastModifiedDateDesc(Long userId);
 
-  List<Todo> findAllByTitleContainsAndHiddenIsFalse(String search);
+  List<Todo> findAllByTitleContainsAndHiddenIsFalseOrderByLastModifiedDateDesc(String search);
 
-  List<Todo> findAllByHiddenIsFalseOrUserId(Long userId);
+  List<Todo> findAllByHiddenIsFalseOrUserIdOrderByLastModifiedDateDesc(Long userId);
 
 }
