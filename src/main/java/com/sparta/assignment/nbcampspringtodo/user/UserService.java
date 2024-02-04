@@ -1,7 +1,8 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
-import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
+import jakarta.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,11 +38,15 @@ public class UserService {
     return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<ResponseDto<String>> deleteUser(UserDetailsImpl userDetails) {
-    String username = userDetails.getUsername();
-
+  public ResponseEntity<ResponseDto<String>> deleteUser(
+      @Valid DeleteUserRequestDto requestDto, String username
+  ) {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
+
+    if (!Objects.equals(passwordEncoder.encode(requestDto.getPassword()), user.getPassword())) {
+      throw new IllegalArgumentException("password가 일치하지 않음");
+    }
 
     userRepository.delete(user);
 

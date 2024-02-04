@@ -33,8 +33,7 @@ public class UserController {
       @Valid @RequestBody DeleteUserRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return userService.deleteUser(userDetails);
+    return userService.deleteUser(requestDto, userDetails.getUsername());
   }
-
 
 }
