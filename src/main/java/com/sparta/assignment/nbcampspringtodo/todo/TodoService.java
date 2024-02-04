@@ -4,6 +4,7 @@ import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.common.Verifier;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +43,18 @@ public class TodoService {
         .build());
   }
 
-  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(Long userId) {
-    User user = verifier.verifyUser(userId);
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
+      Long userId, String username
+  ) {
+    User targetUser = verifier.verifyUser(userId);
+    User currentUser = verifier.verifyUser(username);
 
-    List<Todo> todos = todoRepository.findAllByUserId(user.getId());
+    List<Todo> todos;
+    if (Objects.equals(targetUser, currentUser)) {
+      todos = todoRepository.findAllByUserId(currentUser.getId());
+    } else {
+      todos = todoRepository.findAllByUserIdAndHiddenIsFalse(currentUser.getId());
+    }
 
     return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)

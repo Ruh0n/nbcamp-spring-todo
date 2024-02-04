@@ -44,9 +44,10 @@ public class TodoController {
 
   @GetMapping("/userId/{userId}")
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
-      @PathVariable Long userId
+      @PathVariable Long userId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.getTodosByUserId(userId);
+    return todoService.getTodosByUserId(userId, userDetails.getUsername());
   }
 
   @GetMapping()
