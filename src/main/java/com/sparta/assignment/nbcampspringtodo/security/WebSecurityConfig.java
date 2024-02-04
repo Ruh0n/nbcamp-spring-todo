@@ -1,9 +1,5 @@
-package com.sparta.assignment.nbcampspringtodo.security.config;
+package com.sparta.assignment.nbcampspringtodo.security;
 
-import com.sparta.assignment.nbcampspringtodo.security.JwtAuthenticationFilter;
-import com.sparta.assignment.nbcampspringtodo.security.JwtAuthorizationFilter;
-import com.sparta.assignment.nbcampspringtodo.security.UserDetailsServiceImpl;
-import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -60,13 +56,13 @@ public class WebSecurityConfig {
     http.sessionManagement(sessionManagement ->
         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-    http.authorizeHttpRequests(registry -> registry.requestMatchers(PathRequest.toStaticResources()
-            .atCommonLocations())
-        .permitAll() // resources 접근 허용 설정
-        .requestMatchers("/api/user/signup", "/api/user/login")
-        .permitAll()
-        .anyRequest()
-        .authenticated());
+    http.authorizeHttpRequests(registry ->
+        registry.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+            .permitAll() // resources 접근 허용 설정
+            .requestMatchers("/api/user/v1/users/signup", "/api/user/v1/users/login")
+            .permitAll()
+            .anyRequest()
+            .authenticated());
 
     // 필터 관리
     http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

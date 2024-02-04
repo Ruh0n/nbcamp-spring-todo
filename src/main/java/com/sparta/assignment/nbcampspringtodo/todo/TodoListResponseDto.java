@@ -19,7 +19,7 @@ public class TodoListResponseDto {
 
 
   public TodoListResponseDto(Todo savedTodo) {
-    this.todoId = savedTodo.getTodoId();
+    this.todoId = savedTodo.getId();
     this.title = savedTodo.getTitle();
 
     this.completed = savedTodo.isCompleted();

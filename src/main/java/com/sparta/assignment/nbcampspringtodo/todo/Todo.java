@@ -26,7 +26,7 @@ public class Todo extends Timestamped {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
-  private Long todoId;
+  private Long id;
 
   @Column(nullable = false)
   private String title;
@@ -42,6 +42,7 @@ public class Todo extends Timestamped {
 
   @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY)
   private final List<Comment> comments = new ArrayList<>();
+
   @Setter
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false, updatable = false)

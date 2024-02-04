@@ -1,7 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.assignment.nbcampspringtodo.security.jwt.JwtUtil;
 import com.sparta.assignment.nbcampspringtodo.user.LoginRequestDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
   public JwtAuthenticationFilter(JwtUtil jwtUtil) {
     this.jwtUtil = jwtUtil;
-    setFilterProcessesUrl("/api/user/login");
+    setFilterProcessesUrl("/api/user/v1/users/login");
   }
 
   @Override

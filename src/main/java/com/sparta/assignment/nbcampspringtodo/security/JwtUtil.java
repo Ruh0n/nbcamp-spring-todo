@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.security.jwt;
+package com.sparta.assignment.nbcampspringtodo.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

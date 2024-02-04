@@ -105,7 +105,7 @@ public class TodoService {
   public ResponseEntity<ResponseDto<String>> deleteTodo(Long todoId, String username) {
     Todo todo = verifier.verifyTodoWithUser(todoId, username);
 
-    todoRepository.deleteById(todo.getTodoId());
+    todoRepository.deleteById(todo.getId());
 
     return ResponseEntity.ok(ResponseDto.<String>builder()
         .httpStatus(HttpStatus.OK)

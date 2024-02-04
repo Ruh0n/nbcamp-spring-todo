@@ -28,12 +28,12 @@ public class Comment extends Timestamped {
 
   @Setter
   @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false, updatable = false)
   private User user;
 
   @Setter
   @ManyToOne
-  @JoinColumn(name = "todo_id", nullable = false)
+  @JoinColumn(name = "todo_id", nullable = false, updatable = false)
   private Todo todo;
 
   public Comment(CommentRequestDto requestDto, User user, Todo todo) {

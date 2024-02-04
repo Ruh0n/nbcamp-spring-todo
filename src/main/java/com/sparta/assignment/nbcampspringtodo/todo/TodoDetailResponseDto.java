@@ -25,7 +25,7 @@ public class TodoDetailResponseDto {
 
 
   public TodoDetailResponseDto(Todo todo) {
-    this.todoId = todo.getTodoId();
+    this.todoId = todo.getId();
     this.title = todo.getTitle();
     this.content = todo.getContent();
 
