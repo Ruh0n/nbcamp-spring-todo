@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/todo")
+@RequestMapping("/api/todo/v1")
 public class TodoController {
 
   private final TodoService todoService;
 
-  @PostMapping()
+  @PostMapping("/todos")
   public ResponseEntity<ResponseDto<TodoDetailResponseDto>> createTodo(
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -35,14 +35,14 @@ public class TodoController {
     return todoService.createTodo(requestDto, userDetails.getUsername());
   }
 
-  @GetMapping("/todoId/{todoId}")
+  @GetMapping("/todos/{todoId}")
   public ResponseEntity<ResponseDto<TodoDetailResponseDto>> getTodoDetail(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.getTodoDetail(todoId, userDetails.getUsername());
   }
 
-  @GetMapping("/userId/{userId}")
+  @GetMapping("/todos/{userId}")
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
       @PathVariable Long userId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -50,21 +50,21 @@ public class TodoController {
     return todoService.getTodosByUserId(userId, userDetails.getUsername());
   }
 
-  @GetMapping()
+  @GetMapping("/todos")
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return todoService.getAllNotHiddenTodos(userDetails.getUsername());
   }
 
-  @GetMapping("/search")
+  @GetMapping("/todos/search")
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(
       @Valid @NotBlank @RequestParam("q") String search
   ) {
     return todoService.searchTodoByTitle(search);
   }
 
-  @PutMapping("/todoId/{todoId}")
+  @PutMapping("/todos/{todoId}")
   public ResponseEntity<ResponseDto<TodoListResponseDto>> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto requestDto,
@@ -74,7 +74,7 @@ public class TodoController {
   }
 
 
-  @DeleteMapping("/todoId/{todoId}")
+  @DeleteMapping("/todos/{todoId}")
   public ResponseEntity<ResponseDto<String>> deleteTodo(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {

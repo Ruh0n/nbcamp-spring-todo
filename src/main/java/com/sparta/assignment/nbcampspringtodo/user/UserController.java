@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/v1")
 @RequiredArgsConstructor
 public class UserController {
 
   private final UserService userService;
 
-  @PostMapping("/signup")
+  @PostMapping("/users/signup")
   public ResponseEntity<ResponseDto<SignupResponseDto>> signUp(
       @Valid @RequestBody SignupRequestDto requestDto
   ) {
     return userService.signup(requestDto);
   }
 
-  @DeleteMapping()
+  @DeleteMapping("/users")
   public ResponseEntity<ResponseDto<String>> deleteUser(
       @Valid @RequestBody DeleteUserRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails

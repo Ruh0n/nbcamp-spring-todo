@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api/comment/v1")
 public class CommentController {
 
   private final CommentService commentService;
 
-  @PostMapping("/todoId/{todoId}")
+  @PostMapping("/todos/{todoId}/comments")
   public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
       @PathVariable Long todoId,
       @Valid @RequestBody CommentRequestDto requestDto,
@@ -32,7 +32,7 @@ public class CommentController {
     return commentService.createComment(requestDto, todoId, userDetails.getUsername());
   }
 
-  @PutMapping("/commentId/{commentId}")
+  @PutMapping("/comments/{commentId}")
   public ResponseEntity<ResponseDto<CommentResponseDto>> updateComment(
       @PathVariable Long commentId,
       @Valid @RequestBody CommentRequestDto requestDto,
@@ -41,7 +41,7 @@ public class CommentController {
     return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
   }
 
-  @DeleteMapping("/commentId/{commentId}")
+  @DeleteMapping("/comments/{commentId}")
   public ResponseEntity<ResponseDto<String>> deleteComment(
       @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
