@@ -3,7 +3,6 @@ package com.sparta.assignment.nbcampspringtodo.todo;
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -44,9 +43,9 @@ public class TodoService {
         .httpStatus(HttpStatus.OK)
         .message("todo 조회 성공")
         .data(todoRepository.findAllByUserId(user.getId())
-                  .stream()
-                  .map(TodoResponseDto::new)
-                  .toList())
+            .stream()
+            .map(TodoResponseDto::new)
+            .toList())
         .build();
 
     return ResponseEntity.ok(responseDto);
@@ -56,11 +55,7 @@ public class TodoService {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
 
-    List<Todo> notHiddenTodos = todoRepository.findAllByHiddenIsFalse();
-    List<Todo> usersHiddenTodos = todoRepository.findAllByUserIdAndHiddenIsTrue(user.getId());
-    List<Todo> todos = new ArrayList<>();
-    todos.addAll(notHiddenTodos);
-    todos.addAll(usersHiddenTodos);
+    List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserId(user.getId());
 
     ResponseDto<List<TodoResponseDto>> responseDto = ResponseDto.<List<TodoResponseDto>>builder()
         .httpStatus(HttpStatus.OK)
@@ -76,9 +71,9 @@ public class TodoService {
         .httpStatus(HttpStatus.OK)
         .message("todo 조회 성공")
         .data(todoRepository.findAllByTitleContainsAndHiddenIsFalse(search)
-                  .stream()
-                  .map(TodoResponseDto::new)
-                  .toList())
+            .stream()
+            .map(TodoResponseDto::new)
+            .toList())
         .build();
 
     return ResponseEntity.ok(responseDto);
