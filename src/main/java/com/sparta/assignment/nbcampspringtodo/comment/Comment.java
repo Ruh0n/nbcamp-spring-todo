@@ -26,13 +26,13 @@ public class Comment extends Timestamped {
   @Column(nullable = false)
   private String content;
 
-  @ManyToOne
   @Setter
+  @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @ManyToOne
   @Setter
+  @ManyToOne
   @JoinColumn(name = "todo_id", nullable = false)
   private Todo todo;
 
@@ -40,6 +40,8 @@ public class Comment extends Timestamped {
     this.content = requestDto.getContent();
     this.user = user;
     this.todo = todo;
+
+    todo.getComments().add(this);
   }
 
   public void update(CommentRequestDto requestDto) {

@@ -1,11 +1,9 @@
 package com.sparta.assignment.nbcampspringtodo.comment;
 
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
+import com.sparta.assignment.nbcampspringtodo.common.Verifier;
 import com.sparta.assignment.nbcampspringtodo.todo.Todo;
-import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
 import com.sparta.assignment.nbcampspringtodo.user.User;
-import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
 
-  private final UserRepository userRepository;
+  private final Verifier verifier;
   private final CommentRepository commentRepository;
-  private final TodoRepository todoRepository;
 
   @Transactional
   public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
       CommentRequestDto requestDto, Long todoId, String username
   ) {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-    Todo todo = todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
+    User user = verifier.verifyUser(username);
+    Todo todo = verifier.verifyTodo(todoId);
 
     Comment comment = commentRepository.save(new Comment(requestDto, user, todo));
 
@@ -42,14 +37,7 @@ public class CommentService {
   public ResponseEntity<ResponseDto<CommentResponseDto>> updateComment(
       CommentRequestDto requestDto, Long commentId, String username
   ) {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-    Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
-
-    if (!Objects.equals(user.getId(), comment.getUser().getId())) {
-      throw new IllegalArgumentException("잘못된 접근");
-    }
+    Comment comment = verifier.verifyCommentWithUser(commentId, username);
 
     comment.update(requestDto);
 
@@ -62,16 +50,9 @@ public class CommentService {
 
   @Transactional
   public ResponseEntity<ResponseDto<String>> deleteComment(Long commentId, String username) {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-    Comment comment = commentRepository.findById(commentId)
-        .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
+    Comment comment = verifier.verifyCommentWithUser(commentId, username);
 
-    if (!Objects.equals(user.getId(), comment.getUser().getId())) {
-      throw new IllegalArgumentException("잘못된 접근");
-    }
-
-    commentRepository.deleteById(commentId);
+    commentRepository.deleteById(comment.getId());
 
     return ResponseEntity.ok(ResponseDto.<String>builder()
         .httpStatus(HttpStatus.OK)
