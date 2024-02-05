@@ -36,6 +36,7 @@ public class UserService {
         .build());
   }
 
+  @Transactional
   public ResponseEntity<ResponseDto<String>> deleteUser(
       DeleteUserRequestDto requestDto, String username
   ) {

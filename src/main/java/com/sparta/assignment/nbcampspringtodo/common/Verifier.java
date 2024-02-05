@@ -47,9 +47,6 @@ public class Verifier {
   public User verifyUserWithPassword(String username, String password) {
     User user = verifyUser(username);
 
-    System.out.println(user.getPassword());
-    System.out.println(password);
-
     if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("잘못된 password");
     }
