@@ -1,13 +1,10 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
-import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.common.Verifier;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,33 +16,25 @@ public class TodoService {
   private TodoRepository todoRepository;
 
   @Transactional
-  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> createTodo(
+  public TodoDetailResponseDto createTodo(
       TodoRequestDto requestDto, String username
   ) {
     User user = verifier.verifyUser(username);
 
     Todo todo = new Todo(requestDto, user);
 
-    return ResponseEntity.ok(ResponseDto.<TodoDetailResponseDto>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 등록 성공")
-        .data(new TodoDetailResponseDto(todoRepository.save(todo)))
-        .build());
+    return new TodoDetailResponseDto(todoRepository.save(todo));
   }
 
-  public ResponseEntity<ResponseDto<TodoDetailResponseDto>> getTodoDetail(
+  public TodoDetailResponseDto getTodoDetail(
       Long todoId, String username
   ) {
     Todo todo = verifier.verifyTodoWithUser(todoId, username);
 
-    return ResponseEntity.ok(ResponseDto.<TodoDetailResponseDto>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 조회 성공")
-        .data(new TodoDetailResponseDto(todo))
-        .build());
+    return new TodoDetailResponseDto(todo);
   }
 
-  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
+  public List<TodoListResponseDto> getTodosByUserId(
       Long userId, String username
   ) {
     User targetUser = verifier.verifyUser(userId);
@@ -58,64 +47,43 @@ public class TodoService {
       todos = todoRepository.findAllByUserIdAndHiddenIsFalseOrderByLastModifiedDateDesc(currentUser.getId());
     }
 
-    return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 조회 성공")
-        .data(todos.stream().map(TodoListResponseDto::new).toList())
-        .build());
+    return todos.stream().map(TodoListResponseDto::new).toList();
   }
 
-  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(String username) {
+  public List<TodoListResponseDto> getAllNotHiddenTodos(String username) {
     User user = verifier.verifyUser(username);
     List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserIdOrderByLastModifiedDateDesc(user.getId());
 
-    ResponseDto<List<TodoListResponseDto>> responseDto = ResponseDto.<List<TodoListResponseDto>>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 조회 성공")
-        .data(todos.stream().map(TodoListResponseDto::new).toList())
-        .build();
-
-    return ResponseEntity.ok(responseDto);
+    return todos.stream().map(TodoListResponseDto::new).toList();
   }
 
-  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(
+  public List<TodoListResponseDto> searchTodoByTitle(
       String search, String username
   ) {
     User user = verifier.verifyUser(username);
     List<Todo> todos = todoRepository.findTodoByTitle(search, user.getId());
 
-    return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 조회 성공")
-        .data(todos.stream().map(TodoListResponseDto::new).toList())
-        .build());
+    return todos.stream().map(TodoListResponseDto::new).toList();
   }
 
   @Transactional
-  public ResponseEntity<ResponseDto<TodoListResponseDto>> updateTodo(
+  public TodoListResponseDto updateTodo(
       Long todoId, TodoRequestDto requestDto, String username
   ) {
     Todo todo = verifier.verifyTodoWithUser(todoId, username);
 
     todo.update(requestDto);
 
-    return ResponseEntity.ok(ResponseDto.<TodoListResponseDto>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 수정 성공")
-        .data(new TodoListResponseDto(todo))
-        .build());
+    return new TodoListResponseDto(todo);
   }
 
   @Transactional
-  public ResponseEntity<ResponseDto<String>> deleteTodo(Long todoId, String username) {
+  public String deleteTodo(Long todoId, String username) {
     Todo todo = verifier.verifyTodoWithUser(todoId, username);
 
     todoRepository.deleteById(todo.getId());
 
-    return ResponseEntity.ok(ResponseDto.<String>builder()
-        .httpStatus(HttpStatus.OK)
-        .message("todo 삭제 성공")
-        .build());
+    return "username: " + todo.getTitle();
   }
 
 }

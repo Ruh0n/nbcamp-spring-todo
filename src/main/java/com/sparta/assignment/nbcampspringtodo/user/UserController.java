@@ -27,7 +27,8 @@ public class UserController {
   public ResponseEntity<ResponseDto<SignupResponseDto>> signUp(
       @Valid @RequestBody SignupRequestDto requestDto
   ) {
-    return userService.signup(requestDto);
+    SignupResponseDto data = userService.signup(requestDto);
+    return ResponseEntity.ok(ResponseDto.of(data, "user 등록 성공"));
   }
 
   @Operation(summary = "Login")
@@ -44,7 +45,8 @@ public class UserController {
       @RequestBody DeleteUserRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return userService.deleteUser(requestDto, userDetails.getUsername());
+    String data = userService.deleteUser(requestDto, userDetails.getUsername());
+    return ResponseEntity.ok(ResponseDto.of(data, "user 삭제 성공"));
   }
 
 }

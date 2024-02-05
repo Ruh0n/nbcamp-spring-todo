@@ -31,7 +31,8 @@ public class CommentController {
       @Valid @RequestBody CommentRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return commentService.createComment(requestDto, todoId, userDetails.getUsername());
+    CommentResponseDto data = commentService.createComment(requestDto, todoId, userDetails.getUsername());
+    return ResponseEntity.ok(ResponseDto.of(data, "comment 생성 성공"));
   }
 
   @Operation(summary = "Update a comment")
@@ -41,7 +42,8 @@ public class CommentController {
       @Valid @RequestBody CommentRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
+    CommentResponseDto data = commentService.updateComment(requestDto, commentId, userDetails.getUsername());
+    return ResponseEntity.ok(ResponseDto.of(data, "comment 수정 성공"));
   }
 
   @Operation(summary = "Delete a comment")
@@ -49,7 +51,8 @@ public class CommentController {
   public ResponseEntity<ResponseDto<String>> deleteComment(
       @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return commentService.deleteComment(commentId, userDetails.getUsername());
+    String data = commentService.deleteComment(commentId, userDetails.getUsername());
+    return ResponseEntity.ok(ResponseDto.of(data, "comment 삭제 성공"));
   }
 
 }

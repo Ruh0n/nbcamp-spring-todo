@@ -75,7 +75,7 @@ public class Verifier {
   }
 
   private void assertEqualUsers(User user1, User user2) {
-    if (!Objects.equals(user1, user2)) {
+    if (!Objects.equals(user1.getId(), user2.getId())) {
       throw new IllegalArgumentException("잘못된 접근");
     }
   }

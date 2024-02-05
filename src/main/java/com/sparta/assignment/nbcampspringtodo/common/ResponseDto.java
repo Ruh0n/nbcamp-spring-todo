@@ -22,6 +22,9 @@ public class ResponseDto<T> {
 
   private T data;
 
+  public static <T> ResponseDto<T> of(T data, String message) {
+    return new ResponseDto<>(HttpStatus.OK, message, null, data);
+  }
 
   public String getHttpStatus() {
     return httpStatus.toString();

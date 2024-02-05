@@ -34,7 +34,9 @@ public class TodoController {
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.createTodo(requestDto, userDetails.getUsername());
+    TodoDetailResponseDto data = todoService.createTodo(requestDto, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 생성 성공"));
   }
 
   @Operation(summary = "Get not hidden todos")
@@ -42,7 +44,9 @@ public class TodoController {
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getAllNotHiddenTodos(
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.getAllNotHiddenTodos(userDetails.getUsername());
+    List<TodoListResponseDto> data = todoService.getAllNotHiddenTodos(userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 조회 성공"));
   }
 
   @Operation(summary = "Get a todo details")
@@ -50,7 +54,9 @@ public class TodoController {
   public ResponseEntity<ResponseDto<TodoDetailResponseDto>> getTodoDetail(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.getTodoDetail(todoId, userDetails.getUsername());
+    TodoDetailResponseDto data = todoService.getTodoDetail(todoId, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 조회 성공"));
   }
 
   @Operation(summary = "Get todos of a user")
@@ -58,7 +64,9 @@ public class TodoController {
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> getTodosByUserId(
       @PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.getTodosByUserId(userId, userDetails.getUsername());
+    List<TodoListResponseDto> data = todoService.getTodosByUserId(userId, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 조회 성공"));
   }
 
   @Operation(summary = "Search todos by Title")
@@ -67,7 +75,9 @@ public class TodoController {
       @Valid @NotBlank @RequestParam("q") String search,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.searchTodoByTitle(search, userDetails.getUsername());
+    List<TodoListResponseDto> data = todoService.searchTodoByTitle(search, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 검색 성공"));
   }
 
   @Operation(summary = "Update a todo")
@@ -77,7 +87,9 @@ public class TodoController {
       @Valid @RequestBody TodoRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.updateTodo(todoId, requestDto, userDetails.getUsername());
+    TodoListResponseDto data = todoService.updateTodo(todoId, requestDto, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 갱신 성공"));
   }
 
 
@@ -86,7 +98,9 @@ public class TodoController {
   public ResponseEntity<ResponseDto<String>> deleteTodo(
       @PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.deleteTodo(todoId, userDetails.getUsername());
+    String data = todoService.deleteTodo(todoId, userDetails.getUsername());
+
+    return ResponseEntity.ok(ResponseDto.of(data, "todo 삭제 성공"));
   }
 
 }
