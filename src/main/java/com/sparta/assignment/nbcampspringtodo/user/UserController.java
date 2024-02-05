@@ -41,7 +41,7 @@ public class UserController {
   @Operation(summary = "Delete a User")
   @DeleteMapping("/users")
   public ResponseEntity<ResponseDto<String>> deleteUser(
-      @Valid @RequestBody DeleteUserRequestDto requestDto,
+      @RequestBody DeleteUserRequestDto requestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
     return userService.deleteUser(requestDto, userDetails.getUsername());

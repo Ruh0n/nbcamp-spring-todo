@@ -8,6 +8,7 @@ import com.sparta.assignment.nbcampspringtodo.user.User;
 import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +18,7 @@ public class Verifier {
   private final UserRepository userRepository;
   private final TodoRepository todoRepository;
   private final CommentRepository commentRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public User verifyUser(String username) {
 
@@ -45,7 +47,10 @@ public class Verifier {
   public User verifyUserWithPassword(String username, String password) {
     User user = verifyUser(username);
 
-    if (!Objects.equals(password, user.getPassword())) {
+    System.out.println(user.getPassword());
+    System.out.println(password);
+
+    if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("잘못된 password");
     }
 

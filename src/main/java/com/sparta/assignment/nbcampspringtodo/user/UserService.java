@@ -39,7 +39,7 @@ public class UserService {
   public ResponseEntity<ResponseDto<String>> deleteUser(
       DeleteUserRequestDto requestDto, String username
   ) {
-    User user = verifier.verifyUserWithPassword(username, passwordEncoder.encode(requestDto.getPassword()));
+    User user = verifier.verifyUserWithPassword(username, requestDto.getPassword());
 
     userRepository.delete(user);
 
