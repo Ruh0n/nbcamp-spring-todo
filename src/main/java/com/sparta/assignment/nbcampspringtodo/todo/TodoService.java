@@ -76,8 +76,11 @@ public class TodoService {
     return ResponseEntity.ok(responseDto);
   }
 
-  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(String search) {
-    List<Todo> todos = todoRepository.findAllByTitleContainsAndHiddenIsFalseOrderByLastModifiedDateDesc(search);
+  public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(
+      String search, String username
+  ) {
+    User user = verifier.verifyUser(username);
+    List<Todo> todos = todoRepository.findTodoByTitle(search, user.getId());
 
     return ResponseEntity.ok(ResponseDto.<List<TodoListResponseDto>>builder()
         .httpStatus(HttpStatus.OK)

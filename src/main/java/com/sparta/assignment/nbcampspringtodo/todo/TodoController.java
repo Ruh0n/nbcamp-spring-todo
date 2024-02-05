@@ -64,9 +64,10 @@ public class TodoController {
   @Operation(summary = "Search todos by Title")
   @GetMapping("/todos/search")
   public ResponseEntity<ResponseDto<List<TodoListResponseDto>>> searchTodoByTitle(
-      @Valid @NotBlank @RequestParam("q") String search
+      @Valid @NotBlank @RequestParam("q") String search,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    return todoService.searchTodoByTitle(search);
+    return todoService.searchTodoByTitle(search, userDetails.getUsername());
   }
 
   @Operation(summary = "Update a todo")
