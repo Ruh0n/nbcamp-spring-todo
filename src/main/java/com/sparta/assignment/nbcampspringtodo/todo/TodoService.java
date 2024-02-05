@@ -24,10 +24,12 @@ public class TodoService {
   ) {
     User user = verifier.verifyUser(username);
 
+    Todo todo = new Todo(requestDto, user);
+
     return ResponseEntity.ok(ResponseDto.<TodoDetailResponseDto>builder()
         .httpStatus(HttpStatus.OK)
         .message("todo 등록 성공")
-        .data(new TodoDetailResponseDto(todoRepository.save(new Todo(requestDto, user))))
+        .data(new TodoDetailResponseDto(todoRepository.save(todo)))
         .build());
   }
 

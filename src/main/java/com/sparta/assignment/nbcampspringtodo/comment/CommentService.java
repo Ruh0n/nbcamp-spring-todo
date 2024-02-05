@@ -24,12 +24,12 @@ public class CommentService {
     User user = verifier.verifyUser(username);
     Todo todo = verifier.verifyTodo(todoId);
 
-    Comment comment = commentRepository.save(new Comment(requestDto, user, todo));
+    Comment comment = new Comment(requestDto, user, todo);
 
     return ResponseEntity.ok(ResponseDto.<CommentResponseDto>builder()
         .httpStatus(HttpStatus.OK)
         .message("comment 등록 성공")
-        .data(new CommentResponseDto(comment))
+        .data(new CommentResponseDto(commentRepository.save(comment)))
         .build());
   }
 

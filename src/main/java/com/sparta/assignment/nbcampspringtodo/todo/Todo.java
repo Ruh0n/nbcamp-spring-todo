@@ -3,9 +3,9 @@ package com.sparta.assignment.nbcampspringtodo.todo;
 import com.sparta.assignment.nbcampspringtodo.comment.Comment;
 import com.sparta.assignment.nbcampspringtodo.common.Timestamped;
 import com.sparta.assignment.nbcampspringtodo.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,13 +40,14 @@ public class Todo extends Timestamped {
   @Column(nullable = false)
   private boolean hidden;
 
-  @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY)
-  private final List<Comment> comments = new ArrayList<>();
-
   @Setter
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false, updatable = false)
   private User user;
+
+  @OneToMany(mappedBy = "todo", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  private final List<Comment> comments = new ArrayList<>();
+
 
   public Todo(TodoRequestDto requestDto, User user) {
     this.title = requestDto.getTitle();
@@ -54,7 +55,7 @@ public class Todo extends Timestamped {
     this.completed = requestDto.isCompleted();
     this.hidden = requestDto.isHidden();
 
-    this.user = user;
+    user.addTodo(this);
   }
 
   public void update(TodoRequestDto requestDto) {
@@ -62,6 +63,11 @@ public class Todo extends Timestamped {
     this.content = requestDto.getContent();
     this.completed = requestDto.isCompleted();
     this.hidden = requestDto.isHidden();
+  }
+
+  public void addComment(Comment comment) {
+    this.comments.add(comment);
+    comment.setTodo(this);
   }
 
 }

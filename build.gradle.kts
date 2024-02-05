@@ -32,7 +32,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwt")
 
     // Swagger
-//    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    val swaggerUiVersion = "5.3.1"
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
