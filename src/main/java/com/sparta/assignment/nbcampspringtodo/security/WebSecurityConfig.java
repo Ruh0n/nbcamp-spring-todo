@@ -61,6 +61,8 @@ public class WebSecurityConfig {
             .permitAll() // resources 접근 허용 설정
             .requestMatchers("/api/user/v1/users/signup", "/api/user/v1/users/login")
             .permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+            .permitAll()
             .anyRequest()
             .authenticated());
 

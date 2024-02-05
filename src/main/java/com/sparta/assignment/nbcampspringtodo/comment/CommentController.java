@@ -2,9 +2,10 @@ package com.sparta.assignment.nbcampspringtodo.comment;
 
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
+@Tag(name = "Comment API", description = "Operations about comments")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment/v1")
@@ -23,6 +24,7 @@ public class CommentController {
 
   private final CommentService commentService;
 
+  @Operation(summary = "Create a new comment")
   @PostMapping("/todos/{todoId}/comments")
   public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
       @PathVariable Long todoId,
@@ -32,6 +34,7 @@ public class CommentController {
     return commentService.createComment(requestDto, todoId, userDetails.getUsername());
   }
 
+  @Operation(summary = "Update a comment")
   @PutMapping("/comments/{commentId}")
   public ResponseEntity<ResponseDto<CommentResponseDto>> updateComment(
       @PathVariable Long commentId,
@@ -41,6 +44,7 @@ public class CommentController {
     return commentService.updateComment(requestDto, commentId, userDetails.getUsername());
   }
 
+  @Operation(summary = "Delete a comment")
   @DeleteMapping("/comments/{commentId}")
   public ResponseEntity<ResponseDto<String>> deleteComment(
       @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails

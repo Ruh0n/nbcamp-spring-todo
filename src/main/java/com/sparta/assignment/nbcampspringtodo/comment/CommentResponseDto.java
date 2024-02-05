@@ -1,23 +1,25 @@
 package com.sparta.assignment.nbcampspringtodo.comment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDto {
 
+  private final Long id;
+
+  @Schema(example = "Sample Content")
   private final String content;
-  private Long commentId;
+  @Schema(example = "username")
+  private final String author;
 
-
-  public CommentResponseDto(CommentRequestDto requestDto) {
-    this.content = requestDto.getContent();
-  }
 
   public CommentResponseDto(Comment savedComment) {
-    this.commentId = savedComment.getId();
+    this.id = savedComment.getId();
     this.content = savedComment.getContent();
+    this.author = savedComment.getUser().getUsername();
   }
 
 }

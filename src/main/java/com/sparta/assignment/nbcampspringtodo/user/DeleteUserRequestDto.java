@@ -1,5 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class DeleteUserRequestDto {
 
+  @Schema(example = "password")
   @NotBlank(message = "password는 공백일 수 없습니다.")
   @Pattern(regexp = "^(?!.+ ).+$", message = "paswword는 공백을 포함하면 안됩니다.")
   @Pattern(regexp = "^(?=.*\\d).+$", message = "paswword는 숫자를 포함해야 합니다.")
