@@ -1,8 +1,10 @@
 package com.sparta.assignment.nbcampspringtodo.comment;
 
-import com.sparta.assignment.nbcampspringtodo.common.Verifier;
+import com.sparta.assignment.nbcampspringtodo.common.UserVerifier;
 import com.sparta.assignment.nbcampspringtodo.todo.Todo;
+import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
 import com.sparta.assignment.nbcampspringtodo.user.User;
+import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,17 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
 
-  private final Verifier verifier;
+  private final UserVerifier userVerifier;
+  private final UserRepository userRepository;
+  private final TodoRepository todoRepository;
   private final CommentRepository commentRepository;
 
   @Transactional
   public CommentResponseDto createComment(
       CommentRequestDto requestDto, Long todoId, String username
   ) {
-    User user = verifier.verifyUser(username);
-    Todo todo = verifier.verifyTodo(todoId);
 
-    Comment comment = new Comment(requestDto);
+    User user = userRepository.findByUsernameOrElseThrow(username);
+
+    Todo todo = todoRepository.findByIdOrElseThrow(todoId);
+
+    Comment comment = new Comment(requestDto, user, todo);
 
     return new CommentResponseDto(commentRepository.save(comment));
   }
@@ -30,7 +36,7 @@ public class CommentService {
   public CommentResponseDto updateComment(
       CommentRequestDto requestDto, Long commentId, String username
   ) {
-    Comment comment = verifier.verifyCommentWithUser(commentId, username);
+    Comment comment = userVerifier.verifyCommentWithUser(commentId, username);
 
     comment.update(requestDto);
 
@@ -39,7 +45,7 @@ public class CommentService {
 
   @Transactional
   public String deleteComment(Long commentId, String username) {
-    Comment comment = verifier.verifyCommentWithUser(commentId, username);
+    Comment comment = userVerifier.verifyCommentWithUser(commentId, username);
 
     commentRepository.deleteById(comment.getId());
 

@@ -13,39 +13,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class Verifier {
+public class UserVerifier {
 
   private final UserRepository userRepository;
   private final TodoRepository todoRepository;
   private final CommentRepository commentRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public User verifyUser(String username) {
-
-    return userRepository.findByUsername(username)
-        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-  }
-
-  public User verifyUser(Long userId) {
-
-    return userRepository.findById(userId)
-        .orElseThrow(() -> new NullPointerException("user를 찾을 수 없음"));
-  }
-
-  public Todo verifyTodo(Long todoId) {
-
-    return todoRepository.findById(todoId)
-        .orElseThrow(() -> new NullPointerException("todo를 찾을 수 없음"));
-  }
-
-  public Comment verifyComment(Long commentId) {
-
-    return commentRepository.findById(commentId)
-        .orElseThrow(() -> new NullPointerException("comment를 찾을 수 없음"));
-  }
-
   public User verifyUserWithPassword(String username, String password) {
-    User user = verifyUser(username);
+    User user = userRepository.findByUsernameOrElseThrow(username);
 
     if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("잘못된 password");
@@ -55,9 +31,8 @@ public class Verifier {
   }
 
   public Todo verifyTodoWithUser(Long todoId, String username) {
-    User user = verifyUser(username);
-
-    Todo todo = verifyTodo(todoId);
+    User user = userRepository.findByUsernameOrElseThrow(username);
+    Todo todo = todoRepository.findByIdOrElseThrow(todoId);
 
     assertEqualUsers(user, todo.getUser());
 
@@ -65,9 +40,8 @@ public class Verifier {
   }
 
   public Comment verifyCommentWithUser(Long commentId, String username) {
-    User user = verifyUser(username);
-
-    Comment comment = verifyComment(commentId);
+    User user = userRepository.findByUsernameOrElseThrow(username);
+    Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
     assertEqualUsers(user, comment.getUser());
 

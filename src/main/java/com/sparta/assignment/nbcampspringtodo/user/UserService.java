@@ -1,6 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
-import com.sparta.assignment.nbcampspringtodo.common.Verifier;
+import com.sparta.assignment.nbcampspringtodo.common.UserVerifier;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-  private final Verifier verifier;
+  private final UserVerifier userVerifier;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
@@ -19,12 +19,13 @@ public class UserService {
   @Transactional
   public SignupResponseDto signup(SignupRequestDto requestDto) {
     String username = requestDto.getUsername();
-    String password = passwordEncoder.encode(requestDto.getPassword());
 
     Optional<User> existingUser = userRepository.findByUsername(username);
     if (existingUser.isPresent()) {
       throw new IllegalArgumentException("username 중복");
     }
+
+    String password = passwordEncoder.encode(requestDto.getPassword());
 
     return new SignupResponseDto(userRepository.save(new User(username, password)));
   }
@@ -33,11 +34,11 @@ public class UserService {
   public String deleteUser(
       DeleteUserRequestDto requestDto, String username
   ) {
-    User user = verifier.verifyUserWithPassword(username, requestDto.getPassword());
+    User user = userVerifier.verifyUserWithPassword(username, requestDto.getPassword());
 
     userRepository.delete(user);
 
-    return "username: " + username;
+    return username + " user 삭제";
   }
 
 }

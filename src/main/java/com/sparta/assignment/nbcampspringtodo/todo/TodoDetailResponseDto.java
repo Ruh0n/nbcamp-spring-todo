@@ -3,6 +3,7 @@ package com.sparta.assignment.nbcampspringtodo.todo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.assignment.nbcampspringtodo.comment.Comment;
 import com.sparta.assignment.nbcampspringtodo.comment.CommentResponseDto;
+import com.sparta.assignment.nbcampspringtodo.user.UserDetailResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class TodoDetailResponseDto {
 
   private final LocalDateTime createdDate;
   @Schema(defaultValue = "username")
-  private final String author;
+
+  private final UserDetailResponseDto user;
 
   private final List<CommentResponseDto> comments = new ArrayList<>();
 
@@ -44,7 +46,7 @@ public class TodoDetailResponseDto {
     this.hidden = todo.isHidden();
 
     this.createdDate = todo.getCreatedDate();
-    this.author = todo.getUser().getUsername();
+    this.user = new UserDetailResponseDto(todo.getUser());
 
     this.comments.addAll(comments.stream().map(CommentResponseDto::new).toList());
   }

@@ -1,10 +1,12 @@
 package com.sparta.assignment.nbcampspringtodo.common;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,10 +34,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .uri(((ServletWebRequest) request).getRequest().getRequestURI())
         .build();
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    return ResponseEntity.badRequest().body(responseDto);
   }
 
-  @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
+  @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class,
+      UsernameNotFoundException.class, EntityNotFoundException.class})
   protected ResponseEntity<ResponseDto<?>> handleIllegalArgumentException(
       RuntimeException ex, HttpServletRequest request
   ) {
@@ -45,7 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .uri(request.getRequestURI())
         .build();
 
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    return ResponseEntity.badRequest().body(responseDto);
   }
 
 }
