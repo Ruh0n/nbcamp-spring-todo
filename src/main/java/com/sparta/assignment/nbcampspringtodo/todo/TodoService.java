@@ -43,7 +43,7 @@ public class TodoService {
       }
     }
 
-    List<Comment> comments = commentRepository.findByTodo_Id(todo.getId());
+    List<Comment> comments = commentRepository.findAllByTodo_id(todo.getId());
 
     return new TodoDetailResponseDto(todo, comments);
   }
@@ -92,9 +92,11 @@ public class TodoService {
     return new TodoListResponseDto(todo);
   }
 
-  @Transactional
+  @Transactional()
   public String deleteTodo(Long todoId, String username) {
     Todo todo = userVerifier.verifyTodoWithUser(todoId, username);
+
+    commentRepository.deleteAll(commentRepository.findAllByTodo_id(todo.getId()));
 
     todoRepository.deleteById(todo.getId());
 

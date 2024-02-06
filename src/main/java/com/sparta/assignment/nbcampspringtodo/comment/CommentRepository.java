@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-  List<Comment> findByTodo_Id(Long id);
+  List<Comment> findAllByTodo_id(Long id);
 
   default Comment findByIdOrElseThrow(Long id) {
     return findById(id).orElseThrow(() -> new RuntimeException("No coment found with this id"));

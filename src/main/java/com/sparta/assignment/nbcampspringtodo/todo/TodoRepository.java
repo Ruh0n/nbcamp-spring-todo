@@ -15,6 +15,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
   List<Todo> findAllByHiddenIsFalseOrUserIdOrderByLastModifiedDateDesc(Long userId);
 
+  List<Todo> findAllByUserId(Long userId);
+
   @Query("""
       select t from Todo t
       where t.title like concat('%', ?1, '%')

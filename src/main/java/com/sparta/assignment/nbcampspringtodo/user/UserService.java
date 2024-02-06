@@ -1,6 +1,10 @@
 package com.sparta.assignment.nbcampspringtodo.user;
 
+import com.sparta.assignment.nbcampspringtodo.comment.CommentRepository;
 import com.sparta.assignment.nbcampspringtodo.common.UserVerifier;
+import com.sparta.assignment.nbcampspringtodo.todo.Todo;
+import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +18,8 @@ public class UserService {
   private final UserVerifier userVerifier;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final TodoRepository todoRepository;
+  private final CommentRepository commentRepository;
 
 
   @Transactional
@@ -35,6 +41,11 @@ public class UserService {
       DeleteUserRequestDto requestDto, String username
   ) {
     User user = userVerifier.verifyUserWithPassword(username, requestDto.getPassword());
+
+    List<Todo> todos = todoRepository.findAllByUserId(user.getId());
+    todos.forEach(t -> commentRepository.deleteAll(commentRepository.findAllByTodo_id(t.getId())));
+
+    todoRepository.deleteAll(todos);
 
     userRepository.delete(user);
 
