@@ -1,5 +1,7 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
+import com.sparta.assignment.nbcampspringtodo.comment.Comment;
+import com.sparta.assignment.nbcampspringtodo.comment.CommentRepository;
 import com.sparta.assignment.nbcampspringtodo.common.Verifier;
 import com.sparta.assignment.nbcampspringtodo.user.User;
 import java.util.List;
@@ -14,6 +16,7 @@ public class TodoService {
 
   private final Verifier verifier;
   private TodoRepository todoRepository;
+  private CommentRepository commentRepository;
 
   @Transactional
   public TodoDetailResponseDto createTodo(
@@ -21,7 +24,7 @@ public class TodoService {
   ) {
     User user = verifier.verifyUser(username);
 
-    Todo todo = new Todo(requestDto, user);
+    Todo todo = new Todo(requestDto);
 
     return new TodoDetailResponseDto(todoRepository.save(todo));
   }
@@ -30,8 +33,9 @@ public class TodoService {
       Long todoId, String username
   ) {
     Todo todo = verifier.verifyTodoWithUser(todoId, username);
+    List<Comment> comments = commentRepository.findByTodo_Id(todo.getId());
 
-    return new TodoDetailResponseDto(todo);
+    return new TodoDetailResponseDto(todo, comments);
   }
 
   public List<TodoListResponseDto> getTodosByUserId(

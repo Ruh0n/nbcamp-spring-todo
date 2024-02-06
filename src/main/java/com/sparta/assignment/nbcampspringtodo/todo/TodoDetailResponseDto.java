@@ -1,6 +1,7 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.assignment.nbcampspringtodo.comment.Comment;
 import com.sparta.assignment.nbcampspringtodo.comment.CommentResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -31,6 +32,10 @@ public class TodoDetailResponseDto {
 
 
   public TodoDetailResponseDto(Todo todo) {
+    this(todo, new ArrayList<>());
+  }
+
+  public TodoDetailResponseDto(Todo todo, List<Comment> comments) {
     this.id = todo.getId();
     this.title = todo.getTitle();
     this.content = todo.getContent();
@@ -41,7 +46,7 @@ public class TodoDetailResponseDto {
     this.createdDate = todo.getCreatedDate();
     this.author = todo.getUser().getUsername();
 
-    this.comments.addAll(todo.getComments().stream().map(CommentResponseDto::new).toList());
+    this.comments.addAll(comments.stream().map(CommentResponseDto::new).toList());
   }
 
 }

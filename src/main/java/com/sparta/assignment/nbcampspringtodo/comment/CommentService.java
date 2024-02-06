@@ -21,7 +21,7 @@ public class CommentService {
     User user = verifier.verifyUser(username);
     Todo todo = verifier.verifyTodo(todoId);
 
-    Comment comment = new Comment(requestDto, user, todo);
+    Comment comment = new Comment(requestDto);
 
     return new CommentResponseDto(commentRepository.save(comment));
   }
