@@ -1,7 +1,7 @@
-package com.sparta.assignment.nbcampspringtodo.comment;
+package com.sparta.assignment.nbcampspringtodo.feature.comment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sparta.assignment.nbcampspringtodo.user.UserDetailResponseDto;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserDetailResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

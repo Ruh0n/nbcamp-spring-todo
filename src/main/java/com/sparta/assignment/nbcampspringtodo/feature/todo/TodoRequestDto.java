@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.todo;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

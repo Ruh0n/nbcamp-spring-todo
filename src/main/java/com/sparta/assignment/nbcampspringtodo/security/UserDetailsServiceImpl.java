@@ -1,7 +1,7 @@
 package com.sparta.assignment.nbcampspringtodo.security;
 
-import com.sparta.assignment.nbcampspringtodo.user.User;
-import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

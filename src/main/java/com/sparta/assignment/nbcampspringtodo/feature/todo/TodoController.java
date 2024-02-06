@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.todo;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
 import com.sparta.assignment.nbcampspringtodo.common.ResponseDto;
 import com.sparta.assignment.nbcampspringtodo.security.UserDetailsImpl;

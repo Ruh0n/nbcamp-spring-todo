@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.comment;
+package com.sparta.assignment.nbcampspringtodo.feature.comment;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

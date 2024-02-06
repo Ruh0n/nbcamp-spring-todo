@@ -1,8 +1,7 @@
-package com.sparta.assignment.nbcampspringtodo.comment;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
 import com.sparta.assignment.nbcampspringtodo.common.Timestamped;
-import com.sparta.assignment.nbcampspringtodo.todo.Todo;
-import com.sparta.assignment.nbcampspringtodo.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,37 +13,48 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
-public class Comment extends Timestamped {
+public class Todo extends Timestamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(nullable = false)
   private Long id;
 
   @Column(nullable = false)
+  private String title;
+
+  @Column(nullable = false)
   private String content;
+
+  @Column(nullable = false)
+  private boolean completed;
+
+  @Column(nullable = false)
+  private boolean hidden;
 
   @Setter
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false, updatable = false)
   private User user;
 
-  @Setter
-  @ManyToOne
-  @JoinColumn(name = "todo_id", nullable = false, updatable = false)
-  private Todo todo;
 
-  public Comment(CommentRequestDto requestDto, User user, Todo todo) {
+  public Todo(TodoRequestDto requestDto, User user) {
+    this.title = requestDto.getTitle();
     this.content = requestDto.getContent();
+    this.completed = requestDto.isCompleted();
+    this.hidden = requestDto.isHidden();
 
     this.user = user;
-    this.todo = todo;
   }
 
-  public void update(CommentRequestDto requestDto) {
+  public void update(TodoRequestDto requestDto) {
+    this.title = requestDto.getTitle();
     this.content = requestDto.getContent();
+    this.completed = requestDto.isCompleted();
+    this.hidden = requestDto.isHidden();
   }
 
 }

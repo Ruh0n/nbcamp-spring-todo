@@ -1,11 +1,11 @@
 package com.sparta.assignment.nbcampspringtodo.common;
 
-import com.sparta.assignment.nbcampspringtodo.comment.Comment;
-import com.sparta.assignment.nbcampspringtodo.comment.CommentRepository;
-import com.sparta.assignment.nbcampspringtodo.todo.Todo;
-import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
-import com.sparta.assignment.nbcampspringtodo.user.User;
-import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.Comment;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.CommentRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.todo.Todo;
+import com.sparta.assignment.nbcampspringtodo.feature.todo.TodoRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserRepository;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

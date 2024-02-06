@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.swagger;
+package com.sparta.assignment.nbcampspringtodo.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class OpenAPIConfig implements WebMvcConfigurer {
 
-  private final String JWT_AUTH = "jwtAuth";
+  private static final String JWT_AUTH = "jwtAuth";
 
 
   @Bean

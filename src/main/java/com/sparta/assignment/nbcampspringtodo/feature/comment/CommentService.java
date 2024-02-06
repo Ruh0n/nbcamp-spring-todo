@@ -1,10 +1,10 @@
-package com.sparta.assignment.nbcampspringtodo.comment;
+package com.sparta.assignment.nbcampspringtodo.feature.comment;
 
 import com.sparta.assignment.nbcampspringtodo.common.UserVerifier;
-import com.sparta.assignment.nbcampspringtodo.todo.Todo;
-import com.sparta.assignment.nbcampspringtodo.todo.TodoRepository;
-import com.sparta.assignment.nbcampspringtodo.user.User;
-import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.todo.Todo;
+import com.sparta.assignment.nbcampspringtodo.feature.todo.TodoRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

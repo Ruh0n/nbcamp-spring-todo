@@ -1,10 +1,10 @@
-package com.sparta.assignment.nbcampspringtodo.todo;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
-import com.sparta.assignment.nbcampspringtodo.comment.Comment;
-import com.sparta.assignment.nbcampspringtodo.comment.CommentRepository;
 import com.sparta.assignment.nbcampspringtodo.common.UserVerifier;
-import com.sparta.assignment.nbcampspringtodo.user.User;
-import com.sparta.assignment.nbcampspringtodo.user.UserRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.Comment;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.CommentRepository;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserRepository;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;

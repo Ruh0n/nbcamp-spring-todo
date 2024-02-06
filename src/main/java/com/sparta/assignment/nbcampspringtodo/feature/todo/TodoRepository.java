@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.todo;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;

@@ -1,7 +1,8 @@
 package com.sparta.assignment.nbcampspringtodo.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.assignment.nbcampspringtodo.user.LoginRequestDto;
+import com.sparta.assignment.nbcampspringtodo.common.JwtUtil;
+import com.sparta.assignment.nbcampspringtodo.feature.user.LoginRequestDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

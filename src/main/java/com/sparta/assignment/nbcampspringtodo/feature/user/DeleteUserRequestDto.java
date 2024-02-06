@@ -1,4 +1,4 @@
-package com.sparta.assignment.nbcampspringtodo.user;
+package com.sparta.assignment.nbcampspringtodo.feature.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

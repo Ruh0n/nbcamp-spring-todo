@@ -28,6 +28,8 @@
 
 ## API 명세서
 
+![AllApi.png](docs/APIsJPG.JPG)
+
 ### User API
 
 ![UserApi.png](docs/UserController.png)
@@ -55,6 +57,7 @@
 
 ### Built With
 
+* [![Java][Java-shield]][Java-url]
 * [![SpringBoot][SpringBoot-shield]][SpringBoot-url]
 * [![MySql][MySql-shield]][MySql-url]
 
@@ -66,6 +69,10 @@
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+
+[Java-shield]: https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white
+
+[Java-url]: https://adoptium.net/
 
 [SpringBoot-shield]: https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=Spring&logoColor=white
 

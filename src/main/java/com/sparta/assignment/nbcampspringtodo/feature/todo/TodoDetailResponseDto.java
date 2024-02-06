@@ -1,9 +1,9 @@
-package com.sparta.assignment.nbcampspringtodo.todo;
+package com.sparta.assignment.nbcampspringtodo.feature.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sparta.assignment.nbcampspringtodo.comment.Comment;
-import com.sparta.assignment.nbcampspringtodo.comment.CommentResponseDto;
-import com.sparta.assignment.nbcampspringtodo.user.UserDetailResponseDto;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.Comment;
+import com.sparta.assignment.nbcampspringtodo.feature.comment.CommentResponseDto;
+import com.sparta.assignment.nbcampspringtodo.feature.user.UserDetailResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

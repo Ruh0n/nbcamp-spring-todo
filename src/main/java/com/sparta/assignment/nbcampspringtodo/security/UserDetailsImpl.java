@@ -1,6 +1,6 @@
 package com.sparta.assignment.nbcampspringtodo.security;
 
-import com.sparta.assignment.nbcampspringtodo.user.User;
+import com.sparta.assignment.nbcampspringtodo.feature.user.User;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
