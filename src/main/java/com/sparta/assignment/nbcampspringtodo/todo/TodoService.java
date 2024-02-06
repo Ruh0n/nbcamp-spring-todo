@@ -48,7 +48,7 @@ public class TodoService {
     return new TodoDetailResponseDto(todo, comments);
   }
 
-  public List<TodoListResponseDto> getTodosByUserId(
+  public List<TodoResponseDto> getTodosByUserId(
       Long userId, String username
   ) {
     User targetUser = userRepository.findByIdOrElseThrow(userId);
@@ -61,35 +61,35 @@ public class TodoService {
       todos = todoRepository.findAllByUserIdAndHiddenIsFalseOrderByLastModifiedDateDesc(currentUser.getId());
     }
 
-    return todos.stream().map(TodoListResponseDto::new).toList();
+    return todos.stream().map(TodoResponseDto::new).toList();
   }
 
-  public List<TodoListResponseDto> getAllNotHiddenTodos(String username) {
+  public List<TodoResponseDto> getAllNotHiddenTodos(String username) {
 
     User user = userRepository.findByUsernameOrElseThrow(username);
     List<Todo> todos = todoRepository.findAllByHiddenIsFalseOrUserIdOrderByLastModifiedDateDesc(user.getId());
 
-    return todos.stream().map(TodoListResponseDto::new).toList();
+    return todos.stream().map(TodoResponseDto::new).toList();
   }
 
-  public List<TodoListResponseDto> searchTodoByTitle(
+  public List<TodoResponseDto> searchTodoByTitle(
       String search, String username
   ) {
     User user = userRepository.findByUsernameOrElseThrow(username);
     List<Todo> todos = todoRepository.findTodoByTitle(search, user.getId());
 
-    return todos.stream().map(TodoListResponseDto::new).toList();
+    return todos.stream().map(TodoResponseDto::new).toList();
   }
 
   @Transactional
-  public TodoListResponseDto updateTodo(
+  public TodoResponseDto updateTodo(
       Long todoId, TodoRequestDto requestDto, String username
   ) {
     Todo todo = userVerifier.verifyTodoWithUser(todoId, username);
 
     todo.update(requestDto);
 
-    return new TodoListResponseDto(todo);
+    return new TodoResponseDto(todo);
   }
 
   @Transactional()

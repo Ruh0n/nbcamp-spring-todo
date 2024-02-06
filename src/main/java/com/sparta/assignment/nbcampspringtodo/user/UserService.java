@@ -23,7 +23,7 @@ public class UserService {
 
 
   @Transactional
-  public SignupResponseDto signup(SignupRequestDto requestDto) {
+  public UserDetailResponseDto signup(SignupRequestDto requestDto) {
     String username = requestDto.getUsername();
 
     Optional<User> existingUser = userRepository.findByUsername(username);
@@ -33,7 +33,7 @@ public class UserService {
 
     String password = passwordEncoder.encode(requestDto.getPassword());
 
-    return new SignupResponseDto(userRepository.save(new User(username, password)));
+    return new UserDetailResponseDto(userRepository.save(new User(username, password)));
   }
 
   @Transactional

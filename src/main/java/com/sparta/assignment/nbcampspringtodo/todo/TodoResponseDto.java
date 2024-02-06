@@ -1,13 +1,14 @@
 package com.sparta.assignment.nbcampspringtodo.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.assignment.nbcampspringtodo.user.UserDetailResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TodoListResponseDto {
+public class TodoResponseDto {
 
   private final Long id;
   @Schema(defaultValue = "Sample Title")
@@ -17,10 +18,10 @@ public class TodoListResponseDto {
   private final boolean hidden;
 
   private final LocalDateTime createdDate;
-  private final String author;
+  private final UserDetailResponseDto user;
 
 
-  public TodoListResponseDto(Todo savedTodo) {
+  public TodoResponseDto(Todo savedTodo) {
     this.id = savedTodo.getId();
     this.title = savedTodo.getTitle();
 
@@ -28,7 +29,7 @@ public class TodoListResponseDto {
     this.hidden = savedTodo.isHidden();
 
     this.createdDate = savedTodo.getCreatedDate();
-    this.author = savedTodo.getUser().getUsername();
+    this.user = new UserDetailResponseDto(savedTodo.getUser());
   }
 
 }

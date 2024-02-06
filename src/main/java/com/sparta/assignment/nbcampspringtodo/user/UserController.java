@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "User API", description = "Operations about users")
+@Tag(name = "1. User API", description = "Operations about users")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user/v1")
@@ -24,10 +24,10 @@ public class UserController {
 
   @Operation(summary = "Sign up")
   @PostMapping("/users/signup")
-  public ResponseEntity<ResponseDto<SignupResponseDto>> signUp(
+  public ResponseEntity<ResponseDto<UserDetailResponseDto>> signUp(
       @Valid @RequestBody SignupRequestDto requestDto
   ) {
-    SignupResponseDto data = userService.signup(requestDto);
+    UserDetailResponseDto data = userService.signup(requestDto);
     return ResponseEntity.ok(ResponseDto.of(data, "user 등록 성공"));
   }
 

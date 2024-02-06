@@ -13,7 +13,6 @@ public class CommentResponseDto {
 
   @Schema(example = "Sample Content")
   private final String content;
-  @Schema(example = "username")
   private final UserDetailResponseDto user;
 
 
