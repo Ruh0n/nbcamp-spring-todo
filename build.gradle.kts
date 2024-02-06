@@ -31,9 +31,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwt")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwt")
 
-    // Swagger
-    val swaggerUiVersion = "5.3.1"
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3")
+    // springdoc - Swagger
+    val springdoc = "2.3.0"
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdoc")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
