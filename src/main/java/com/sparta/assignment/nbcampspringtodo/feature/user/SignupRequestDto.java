@@ -24,7 +24,7 @@ public class SignupRequestDto {
   @Pattern(regexp = "^(?!.+ ).+$", message = "paswword는 공백을 포함하면 안됨")
   @Pattern(regexp = "^(?=.*\\d).+$", message = "paswword는 숫자를 포함해야 함")
   @Pattern(regexp = "^(?=.*[a-z]).+$", message = "paswword는 소문자를 포함해야 함")
-  @Pattern(regexp = "^(?=.*[A-Z]).+$", message = "paswword는 소문자를 포함해야 함")
+  @Pattern(regexp = "^(?=.*[A-Z]).+$", message = "paswword는 대문자를 포함해야 함")
   @Size(min = 8, max = 15, message = "password는 8자 이상 15자 이하만 가능")
   private String password;
 
