@@ -1,7 +1,6 @@
-<a name="readme-top"></a>
-
 <!-- PROJECT LOGO -->
 <br />
+<a name="readme-top"></a>
 <div align="center">
 
 <h1 align="center">Todo</h1>
@@ -18,37 +17,38 @@
 
 <!-- ERD -->
 
-### ERD
+## ERD
 
 ![ERD.png](docs/ERD.png)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<br>
 
 <!-- API 명세서 -->
 
 ## API 명세서
 
-![swagger.png](docs/swagger.png)
-<br />
-
-### Comment API
-
-![CommentApi.png](docs/CommentApi.png)
-<br />
-
-### Comment API
-
-![TodoApi.png](docs/TodoApi.png)
-<br />
-
 ### User API
 
-![UserApi.png](docs/UserApi.png)
+![UserApi.png](docs/UserController.png)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 <br />
 
-
+![swagger.png](docs/APIsJPG.JPG)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+<br />
 
+### Todo API
 
+![TodoApi.png](docs/TodoController.png)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<br />
+
+### Comment API
+
+![CommentApi.png](docs/CommentController.png)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<br />
 
 
 <!-- Built With -->
